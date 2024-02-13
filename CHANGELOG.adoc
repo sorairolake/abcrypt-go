@@ -14,9 +14,9 @@ All notable changes to this project will be documented in this file.
 The format is based on https://keepachangelog.com/[Keep a Changelog], and this
 project adheres to https://semver.org/[Semantic Versioning].
 
-== {compare-url}/v0.1.0\...HEAD[Unreleased]
+== {compare-url}/v0.1.0\...v0.1.1[0.1.1] - 2024-02-13
 
-=== Changed
+=== Fixed
 
 * Change to follow Go's license policy ({pull-request-url}/3[#3])
 
