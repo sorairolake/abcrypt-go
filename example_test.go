@@ -87,5 +87,4 @@ func ExampleParams() {
 	// memoryCost: 32
 	// timeCost: 3
 	// parallelism: 4
-
 }
