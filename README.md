@@ -47,7 +47,7 @@ licensing information.
 [ci-url]: https://github.com/sorairolake/abcrypt-go/actions?query=branch%3Adevelop+workflow%3ACI++
 [reference-badge]: https://img.shields.io/badge/Go-Reference-steelblue?logo=go&style=for-the-badge
 [reference-url]: https://pkg.go.dev/github.com/sorairolake/abcrypt-go
-[go-version-badge]: https://img.shields.io/github/go-mod/go-version/sorairolake/abcrypt-go?style=for-the-badge
+[go-version-badge]: https://img.shields.io/github/go-mod/go-version/sorairolake/abcrypt-go?logo=go&style=for-the-badge
 [abcrypt encrypted data format]: https://sorairolake.github.io/abcrypt/book/format.html
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
