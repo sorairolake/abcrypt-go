@@ -20,6 +20,10 @@ project adheres to https://semver.org/[Semantic Versioning].
 
 * Add examples ({pull-request-url}/5[#5])
 
+=== Changed
+
+* Export an error wrapped in `InvalidMACError` ({pull-request-url}/6[#6])
+
 == {compare-url}/v0.1.0\...v0.1.1[0.1.1] - 2024-02-13
 
 === Fixed
