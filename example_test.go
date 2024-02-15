@@ -16,14 +16,10 @@ import (
 const data = "Hello, world!\n"
 
 func Example() {
-	ciphertext := abcrypt.NewEncryptorWithParams([]byte(data), []byte(passphrase), 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.EncryptWithParams([]byte(data), []byte(passphrase), 32, 3, 4)
 	fmt.Printf("ciphertext and input data are different: %v\n", !reflect.DeepEqual(ciphertext, []byte(data)))
 
-	cipher, err := abcrypt.NewDecryptor(ciphertext, []byte(passphrase))
-	if err != nil {
-		log.Fatal(err)
-	}
-	plaintext, err := cipher.Decrypt()
+	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -166,3 +166,77 @@ func TestEncryptorOutLen(t *testing.T) {
 		t.Errorf("expected outLen `%v`, got `%v`", expected, outLen)
 	}
 }
+
+func TestConvenientEncrypt(t *testing.T) {
+	data, err := os.ReadFile("tests/data/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.Encrypt(data, []byte(passphrase))
+	if reflect.DeepEqual(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+	memoryCost := params.MemoryCost
+	if memoryCost != 19456 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 19456, memoryCost)
+	}
+	timeCost := params.TimeCost
+	if timeCost != 2 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 2, timeCost)
+	}
+	parallelism := params.Parallelism
+	if parallelism != 1 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 1, parallelism)
+	}
+
+	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
+func TestConvenientEncryptWithParams(t *testing.T) {
+	data, err := os.ReadFile("tests/data/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.EncryptWithParams(data, []byte(passphrase), 32, 3, 4)
+	if reflect.DeepEqual(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+	memoryCost := params.MemoryCost
+	if memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+	timeCost := params.TimeCost
+	if timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+	parallelism := params.Parallelism
+	if parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}

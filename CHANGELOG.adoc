@@ -19,6 +19,8 @@ project adheres to https://semver.org/[Semantic Versioning].
 === Added
 
 * Add examples ({pull-request-url}/5[#5])
+* Add convenience functions for encryption and decryption
+  ({pull-request-url}/8[#8])
 
 === Changed
 

@@ -58,3 +58,15 @@ func (d *Decryptor) Decrypt() ([]byte, error) {
 func (d *Decryptor) OutLen() int {
 	return len(d.ciphertext) - TagSize
 }
+
+// Decrypt decrypts the ciphertext and returns the plaintext.
+//
+// This is a convenience function for using [NewDecryptor] and
+// [Decryptor.Decrypt].
+func Decrypt(ciphertext, passphrase []byte) ([]byte, error) {
+	cipher, err := NewDecryptor(ciphertext, passphrase)
+	if err != nil {
+		return nil, err
+	}
+	return cipher.Decrypt()
+}

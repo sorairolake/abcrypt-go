@@ -63,3 +63,24 @@ func (e *Encryptor) Encrypt() []byte {
 func (e *Encryptor) OutLen() int {
 	return HeaderSize + len(e.plaintext) + TagSize
 }
+
+// Encrypt encrypts the plaintext and returns the ciphertext.
+//
+// This uses the [recommended Argon2 parameters].
+//
+// This is a convenience function for using [NewEncryptor] and
+// [Encryptor.Encrypt].
+//
+// [recommended Argon2 parameters]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+func Encrypt(plaintext, passphrase []byte) []byte {
+	return NewEncryptor(plaintext, passphrase).Encrypt()
+}
+
+// EncryptWithParams encrypts the plaintext with the given Argon2 parameters
+// and returns the ciphertext.
+//
+// This is a convenience function for using [NewEncryptorWithParams] and
+// [Encryptor.Encrypt].
+func EncryptWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32, parallelism uint8) []byte {
+	return NewEncryptorWithParams(plaintext, passphrase, memoryCost, timeCost, parallelism).Encrypt()
+}

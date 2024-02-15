@@ -177,3 +177,22 @@ func TestDecryptOutLen(t *testing.T) {
 		t.Errorf("expected outLen `%v`, got `%v`", expected, outLen)
 	}
 }
+
+func TestConvenientDecrypt(t *testing.T) {
+	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile("tests/data/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	plaintext, err := abcrypt.Decrypt(dataEnc, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
