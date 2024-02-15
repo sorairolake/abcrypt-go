@@ -2,13 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-package abcrypt
+package abcrypt_test
 
 import (
 	"encoding/binary"
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/sorairolake/abcrypt-go"
 )
 
 func TestEncrypt(t *testing.T) {
@@ -17,12 +19,70 @@ func TestEncrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptor(data, []byte(passphrase)).Encrypt()
 	if reflect.DeepEqual(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
 
-	cipher, err := NewDecryptor(ciphertext, []byte(passphrase))
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+	memoryCost := params.MemoryCost
+	if memoryCost != 19456 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 19456, memoryCost)
+	}
+	timeCost := params.TimeCost
+	if timeCost != 2 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 2, timeCost)
+	}
+	parallelism := params.Parallelism
+	if parallelism != 1 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 1, parallelism)
+	}
+
+	cipher, err := abcrypt.NewDecryptor(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+	plaintext, err := cipher.Decrypt()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
+func TestEncryptWithParams(t *testing.T) {
+	data, err := os.ReadFile("tests/data/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
+	if reflect.DeepEqual(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+	memoryCost := params.MemoryCost
+	if memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+	timeCost := params.TimeCost
+	if timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+	parallelism := params.Parallelism
+	if parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	cipher, err := abcrypt.NewDecryptor(ciphertext, []byte(passphrase))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,9 +96,9 @@ func TestEncrypt(t *testing.T) {
 }
 
 func TestEncryptMinimumOutputLength(t *testing.T) {
-	cipher := NewEncryptorWithParams(nil, []byte(passphrase), 32, 3, 4)
+	cipher := abcrypt.NewEncryptorWithParams(nil, []byte(passphrase), 32, 3, 4)
 	outLen := cipher.OutLen()
-	expected := HeaderSize + TagSize
+	expected := abcrypt.HeaderSize + abcrypt.TagSize
 	if outLen != expected {
 		t.Fatalf("expected outLen `%v`, got `%v`", expected, outLen)
 	}
@@ -54,7 +114,7 @@ func TestEncryptMagicNumber(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
 	expected := []byte("abcrypt")
 	if !reflect.DeepEqual(ciphertext[:7], expected) {
 		t.Errorf("expected magic number `%v`, got `%v`", expected, ciphertext[:7])
@@ -67,7 +127,7 @@ func TestEncryptVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
 	if ciphertext[7] != 0 {
 		t.Errorf("expected version `%v`, got `%v`", 0, ciphertext[7])
 	}
@@ -79,7 +139,7 @@ func TestEncryptParams(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
 	memoryCost := binary.LittleEndian.Uint32(ciphertext[8:12])
 	if memoryCost != 32 {
 		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
@@ -100,8 +160,8 @@ func TestEncryptorOutLen(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	outLen := NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).OutLen()
-	expected := len(data) + HeaderSize + TagSize
+	outLen := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).OutLen()
+	expected := len(data) + abcrypt.HeaderSize + abcrypt.TagSize
 	if outLen != expected {
 		t.Errorf("expected outLen `%v`, got `%v`", expected, outLen)
 	}

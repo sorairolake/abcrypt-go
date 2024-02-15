@@ -14,7 +14,6 @@ import (
 )
 
 const data = "Hello, world!\n"
-const passphrase = "passphrase"
 
 func Example() {
 	ciphertext := abcrypt.NewEncryptorWithParams([]byte(data), []byte(passphrase), 32, 3, 4).Encrypt()

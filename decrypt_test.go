@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-package abcrypt
+package abcrypt_test
 
 import (
 	"errors"
@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"slices"
 	"testing"
+
+	"github.com/sorairolake/abcrypt-go"
 )
 
 func TestDecrypt(t *testing.T) {
@@ -22,7 +24,7 @@ func TestDecrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cipher, err := NewDecryptor(dataEnc, []byte(passphrase))
+	cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,8 +43,8 @@ func TestDecryptIncorrectPassphrase(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := NewDecryptor(dataEnc, []byte("password")); err != nil {
-		if !errors.Is(err, ErrInvalidHeaderMAC) {
+	if _, err := abcrypt.NewDecryptor(dataEnc, []byte("password")); err != nil {
+		if !errors.Is(err, abcrypt.ErrInvalidHeaderMAC) {
 			t.Error("unexpected error type")
 		}
 	} else {
@@ -51,10 +53,10 @@ func TestDecryptIncorrectPassphrase(t *testing.T) {
 }
 
 func TestDecryptInvalidInputLength(t *testing.T) {
-	data := make([]byte, (HeaderSize+TagSize)-1)
+	data := make([]byte, (abcrypt.HeaderSize+abcrypt.TagSize)-1)
 
-	if _, err := NewDecryptor(data, []byte(passphrase)); err != nil {
-		if !errors.Is(err, ErrInvalidLength) {
+	if _, err := abcrypt.NewDecryptor(data, []byte(passphrase)); err != nil {
+		if !errors.Is(err, abcrypt.ErrInvalidLength) {
 			t.Error("unexpected error type")
 		}
 	} else {
@@ -62,8 +64,8 @@ func TestDecryptInvalidInputLength(t *testing.T) {
 	}
 
 	data = append(data, 0)
-	if _, err := NewDecryptor(data, []byte(passphrase)); err != nil {
-		if !errors.Is(err, ErrInvalidMagicNumber) {
+	if _, err := abcrypt.NewDecryptor(data, []byte(passphrase)); err != nil {
+		if !errors.Is(err, abcrypt.ErrInvalidMagicNumber) {
 			t.Error("unexpected error type")
 		}
 	} else {
@@ -78,8 +80,8 @@ func TestDecryptInvalidMagicNumber(t *testing.T) {
 	}
 
 	dataEnc[0] = byte('b')
-	if _, err := NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
-		if !errors.Is(err, ErrInvalidMagicNumber) {
+	if _, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
+		if !errors.Is(err, abcrypt.ErrInvalidMagicNumber) {
 			t.Error("unexpected error type")
 		}
 	} else {
@@ -94,9 +96,9 @@ func TestDecryptUnknownVersion(t *testing.T) {
 	}
 
 	dataEnc[7] = 1
-	if _, err := NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
+	if _, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
 		switch e := err.(type) {
-		case *UnknownVersionError:
+		case *abcrypt.UnknownVersionError:
 			if e.Version != 1 {
 				t.Errorf("expected unrecognized version number `%v`, got `%v`", 1, e.Version)
 			}
@@ -117,8 +119,8 @@ func TestDecryptInvalidHeaderMAC(t *testing.T) {
 	headerMAC := dataEnc[76:140]
 	slices.Reverse(headerMAC)
 	copy(dataEnc[76:140], headerMAC)
-	if _, err := NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
-		if !errors.Is(err, ErrInvalidHeaderMAC) {
+	if _, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase)); err != nil {
+		if !errors.Is(err, abcrypt.ErrInvalidHeaderMAC) {
 			t.Error("unexpected error type")
 		}
 	} else {
@@ -132,17 +134,17 @@ func TestDecryptInvalidMAC(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	startMAC := len(dataEnc) - TagSize
+	startMAC := len(dataEnc) - abcrypt.TagSize
 	mac := dataEnc[startMAC:]
 	slices.Reverse(mac)
 	copy(dataEnc[startMAC:], mac)
-	cipher, err := NewDecryptor(dataEnc, []byte(passphrase))
+	cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, err := cipher.Decrypt(); err != nil {
 		switch e := err.(type) {
-		case *InvalidMACError:
+		case *abcrypt.InvalidMACError:
 			const expected = "chacha20poly1305: message authentication failed"
 			if e.Unwrap().Error() != expected {
 				t.Error("unexpected error type")
@@ -165,7 +167,7 @@ func TestDecryptOutLen(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cipher, err := NewDecryptor(dataEnc, []byte(passphrase))
+	cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
 	if err != nil {
 		t.Fatal(err)
 	}

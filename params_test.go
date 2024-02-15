@@ -2,12 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-package abcrypt
+package abcrypt_test
 
 import (
 	"encoding/json"
 	"os"
 	"testing"
+
+	"github.com/sorairolake/abcrypt-go"
 )
 
 func TestParams(t *testing.T) {
@@ -16,7 +18,7 @@ func TestParams(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	params, err := NewParams(ciphertext)
+	params, err := abcrypt.NewParams(ciphertext)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -40,7 +42,7 @@ func TestParamsMarshalJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	params, err := NewParams(ciphertext)
+	params, err := abcrypt.NewParams(ciphertext)
 	if err != nil {
 		t.Fatal(err)
 	}
