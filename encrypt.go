@@ -36,12 +36,17 @@ func NewEncryptor(plaintext, passphrase []byte) *Encryptor {
 func NewEncryptorWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
 	header := newHeader(memoryCost, timeCost, uint32(parallelism))
 
-	k := argon2.IDKey(passphrase, header.salt[:], header.timeCost, header.memoryCost, uint8(header.parallelism), derivedKeySize)
-	dk := newDerivedKey([derivedKeySize]byte(k))
+	s := header.salt[:]
+	t := header.timeCost
+	m := header.memoryCost
+	p := uint8(header.parallelism)
+	k := argon2.IDKey(passphrase, s, t, m, p, derivedKeySize)
+	derivedKey := newDerivedKey([derivedKeySize]byte(k))
 
-	header.computeMAC(dk.mac[:])
+	header.computeMAC(derivedKey.mac[:])
 
-	e := Encryptor{header, dk, plaintext}
+	e := Encryptor{header, derivedKey, plaintext}
+
 	return &e
 }
 
@@ -53,9 +58,11 @@ func (e *Encryptor) Encrypt() []byte {
 	if err != nil {
 		panic(err)
 	}
+
 	ciphertext := cipher.Seal(nil, e.header.nonce[:], e.plaintext, nil)
 
 	out := append(header[:], ciphertext...)
+
 	return out
 }
 

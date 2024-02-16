@@ -15,10 +15,16 @@ import (
 	"golang.org/x/term"
 )
 
+const (
+	defaultMemoryCost  = 19456
+	defaultTimeCost    = 2
+	defaultParallelism = 1
+)
+
 func main() {
-	memoryCostFlag := flag.Uint("m", 19456, "Set the memory size in KiB")
-	timeCostFlag := flag.Uint("t", 2, "Set the number of iterations")
-	parallelismFlag := flag.Uint("p", 1, "Set the degree of parallelism")
+	memoryCostFlag := flag.Uint("m", defaultMemoryCost, "Set the memory size in KiB")
+	timeCostFlag := flag.Uint("t", defaultTimeCost, "Set the number of iterations")
+	parallelismFlag := flag.Uint("p", defaultParallelism, "Set the degree of parallelism")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0])
@@ -38,12 +44,17 @@ func main() {
 	}
 
 	fmt.Print("Enter passphrase: ")
+
 	passphrase, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println()
-	ciphertext := abcrypt.NewEncryptorWithParams(plaintext, passphrase, uint32(*memoryCostFlag), uint32(*timeCostFlag), uint8(*parallelismFlag)).Encrypt()
+
+	m := uint32(*memoryCostFlag)
+	t := uint32(*timeCostFlag)
+	p := uint8(*parallelismFlag)
+	ciphertext := abcrypt.EncryptWithParams(plaintext, passphrase, m, t, p)
 
 	if err := os.WriteFile(args[1], ciphertext, os.ModeType); err != nil {
 		log.Fatal(err)

@@ -36,16 +36,14 @@ func main() {
 	}
 
 	fmt.Print("Enter passphrase: ")
+
 	passphrase, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println()
-	cipher, err := abcrypt.NewDecryptor(ciphertext, passphrase)
-	if err != nil {
-		log.Fatal(err)
-	}
-	plaintext, err := cipher.Decrypt()
+
+	plaintext, err := abcrypt.Decrypt(ciphertext, passphrase)
 	if err != nil {
 		log.Fatal(err)
 	}

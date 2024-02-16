@@ -5,8 +5,8 @@
 package abcrypt
 
 const (
-	V0 = v0
-	V1 = v1
+	Version0 = version0
+	Version1 = version1
 )
 
 const MagicNumber = magicNumber

@@ -26,18 +26,21 @@ func main() {
 	args := flag.Args()
 
 	var ciphertext []byte
+
 	switch flag.NArg() {
 	case 0:
 		b, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		ciphertext = b
 	case 1:
 		b, err := os.ReadFile(args[0])
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		ciphertext = b
 	default:
 		flag.Usage()
@@ -48,6 +51,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	if *jsonFlag {
 		json, err := json.Marshal(params)
 		if err != nil {
@@ -55,6 +59,9 @@ func main() {
 		}
 		fmt.Println(string(json))
 	} else {
-		fmt.Printf("Parameters used: memoryCost = %v; timeCost = %v; parallelism = %v;\n", params.MemoryCost, params.TimeCost, params.Parallelism)
+		m := params.MemoryCost
+		t := params.TimeCost
+		p := params.Parallelism
+		fmt.Printf("Parameters used: memoryCost = %v; timeCost = %v; parallelism = %v;\n", m, t, p)
 	}
 }
