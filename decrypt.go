@@ -27,17 +27,23 @@ func NewDecryptor(ciphertext, passphrase []byte) (*Decryptor, error) {
 	}
 
 	if header.parallelism > math.MaxUint8 {
-		msg := fmt.Sprintf("abcrypt: this package does not support the degree of parallelism `p` greater than %v", math.MaxUint8)
+		msg := fmt.Sprintf("abcrypt: `parallelism` over %v is not supported", math.MaxUint8)
 		panic(msg)
 	}
-	k := argon2.IDKey(passphrase, header.salt[:], header.timeCost, header.memoryCost, uint8(header.parallelism), derivedKeySize)
-	dk := newDerivedKey([derivedKeySize]byte(k))
 
-	if err := header.verifyMAC(dk.mac[:], ciphertext[76:HeaderSize]); err != nil {
+	s := header.salt[:]
+	t := header.timeCost
+	m := header.memoryCost
+	p := uint8(header.parallelism)
+	k := argon2.IDKey(passphrase, s, t, m, p, derivedKeySize)
+	derivedKey := newDerivedKey([derivedKeySize]byte(k))
+
+	if err := header.verifyMAC(derivedKey.mac[:], ciphertext[76:HeaderSize]); err != nil {
 		return nil, err
 	}
 
-	d := Decryptor{header, dk, ciphertext[HeaderSize:]}
+	d := Decryptor{header, derivedKey, ciphertext[HeaderSize:]}
+
 	return &d, nil
 }
 
@@ -47,14 +53,29 @@ func (d *Decryptor) Decrypt() ([]byte, error) {
 	if err != nil {
 		panic(err)
 	}
+
 	plaintext, err := cipher.Open(nil, d.header.nonce[:], d.ciphertext, nil)
 	if err != nil {
 		return nil, &InvalidMACError{err}
 	}
+
 	return plaintext, nil
 }
 
 // OutLen returns the number of output bytes of the decrypted data.
 func (d *Decryptor) OutLen() int {
 	return len(d.ciphertext) - TagSize
+}
+
+// Decrypt decrypts the ciphertext and returns the plaintext.
+//
+// This is a convenience function for using [NewDecryptor] and
+// [Decryptor.Decrypt].
+func Decrypt(ciphertext, passphrase []byte) ([]byte, error) {
+	cipher, err := NewDecryptor(ciphertext, passphrase)
+	if err != nil {
+		return nil, err
+	}
+
+	return cipher.Decrypt()
 }

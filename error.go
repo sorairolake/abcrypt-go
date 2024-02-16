@@ -34,13 +34,13 @@ func (e *UnknownVersionError) Error() string {
 // InvalidMACError represents an error due to the MAC (authentication tag) of
 // the ciphertext was invalid.
 type InvalidMACError struct {
-	err error
+	Err error
 }
 
 func (e *InvalidMACError) Error() string {
-	return fmt.Sprintf("abcrypt: invalid ciphertext MAC: %v", e.err)
+	return fmt.Sprintf("abcrypt: invalid ciphertext MAC: %v", e.Err)
 }
 
 func (e *InvalidMACError) Unwrap() error {
-	return e.err
+	return e.Err
 }

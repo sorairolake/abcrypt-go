@@ -14,6 +14,18 @@ All notable changes to this project will be documented in this file.
 The format is based on https://keepachangelog.com/[Keep a Changelog], and this
 project adheres to https://semver.org/[Semantic Versioning].
 
+== {compare-url}/v0.1.1\...v0.1.2[0.1.2] - 2024-02-16
+
+=== Added
+
+* Add examples ({pull-request-url}/5[#5])
+* Add convenience functions for encryption and decryption
+  ({pull-request-url}/8[#8])
+
+=== Changed
+
+* Export an error wrapped in `InvalidMACError` ({pull-request-url}/6[#6])
+
 == {compare-url}/v0.1.0\...v0.1.1[0.1.1] - 2024-02-13
 
 === Fixed

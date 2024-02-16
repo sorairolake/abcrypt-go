@@ -36,12 +36,17 @@ func NewEncryptor(plaintext, passphrase []byte) *Encryptor {
 func NewEncryptorWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
 	header := newHeader(memoryCost, timeCost, uint32(parallelism))
 
-	k := argon2.IDKey(passphrase, header.salt[:], header.timeCost, header.memoryCost, uint8(header.parallelism), derivedKeySize)
-	dk := newDerivedKey([derivedKeySize]byte(k))
+	s := header.salt[:]
+	t := header.timeCost
+	m := header.memoryCost
+	p := uint8(header.parallelism)
+	k := argon2.IDKey(passphrase, s, t, m, p, derivedKeySize)
+	derivedKey := newDerivedKey([derivedKeySize]byte(k))
 
-	header.computeMAC(dk.mac[:])
+	header.computeMAC(derivedKey.mac[:])
 
-	e := Encryptor{header, dk, plaintext}
+	e := Encryptor{header, derivedKey, plaintext}
+
 	return &e
 }
 
@@ -53,13 +58,36 @@ func (e *Encryptor) Encrypt() []byte {
 	if err != nil {
 		panic(err)
 	}
+
 	ciphertext := cipher.Seal(nil, e.header.nonce[:], e.plaintext, nil)
 
 	out := append(header[:], ciphertext...)
+
 	return out
 }
 
 // OutLen returns the number of output bytes of the encrypted data.
 func (e *Encryptor) OutLen() int {
 	return HeaderSize + len(e.plaintext) + TagSize
+}
+
+// Encrypt encrypts the plaintext and returns the ciphertext.
+//
+// This uses the [recommended Argon2 parameters].
+//
+// This is a convenience function for using [NewEncryptor] and
+// [Encryptor.Encrypt].
+//
+// [recommended Argon2 parameters]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+func Encrypt(plaintext, passphrase []byte) []byte {
+	return NewEncryptor(plaintext, passphrase).Encrypt()
+}
+
+// EncryptWithParams encrypts the plaintext with the given Argon2 parameters
+// and returns the ciphertext.
+//
+// This is a convenience function for using [NewEncryptorWithParams] and
+// [Encryptor.Encrypt].
+func EncryptWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32, parallelism uint8) []byte {
+	return NewEncryptorWithParams(plaintext, passphrase, memoryCost, timeCost, parallelism).Encrypt()
 }

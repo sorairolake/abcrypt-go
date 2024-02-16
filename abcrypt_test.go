@@ -2,29 +2,34 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-package abcrypt
+package abcrypt_test
 
 import (
 	"testing"
 
+	"github.com/sorairolake/abcrypt-go"
 	"golang.org/x/crypto/chacha20poly1305"
 )
 
 const passphrase = "passphrase"
 
 func TestHeaderSize(t *testing.T) {
-	s := HeaderSize
-	if s != 140 {
-		t.Errorf("expected HeaderSize `%v`, got `%v`", 140, s)
+	t.Parallel()
+
+	if size := abcrypt.HeaderSize; size != 140 {
+		t.Errorf("expected HeaderSize `%v`, got `%v`", 140, size)
 	}
 }
 
 func TestTagSize(t *testing.T) {
-	s := TagSize
-	if s != 16 {
-		t.Errorf("expected TagSize `%v`, got `%v`", 16, s)
+	t.Parallel()
+
+	size := abcrypt.TagSize
+	if size != 16 {
+		t.Errorf("expected TagSize `%v`, got `%v`", 16, size)
 	}
-	if s != chacha20poly1305.Overhead {
-		t.Errorf("expected TagSize `%v`, got `%v`", chacha20poly1305.Overhead, s)
+
+	if size != chacha20poly1305.Overhead {
+		t.Errorf("expected TagSize `%v`, got `%v`", chacha20poly1305.Overhead, size)
 	}
 }

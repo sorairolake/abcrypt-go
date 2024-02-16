@@ -20,6 +20,8 @@ func NewParams(ciphertext []byte) (*Params, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	params := Params{header.memoryCost, header.timeCost, header.parallelism}
+
 	return &params, nil
 }
