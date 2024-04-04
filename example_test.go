@@ -50,7 +50,7 @@ func ExampleEncryptor() {
 }
 
 func ExampleDecryptor() {
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,7 +78,7 @@ func ExampleDecryptor() {
 }
 
 func ExampleParams() {
-	ciphertext, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	ciphertext, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		log.Fatal(err)
 	}
