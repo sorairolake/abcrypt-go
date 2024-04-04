@@ -8,8 +8,10 @@ package abcrypt
 type Params struct {
 	// MemoryCost represents memory size in KiB.
 	MemoryCost uint32 `json:"memoryCost"`
+
 	// TimeCost represents the number of iterations.
 	TimeCost uint32 `json:"timeCost"`
+
 	// Parallelism represents the degree of parallelism.
 	Parallelism uint32 `json:"parallelism"`
 }
