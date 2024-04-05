@@ -7,7 +7,7 @@ package abcrypt_test
 import (
 	"encoding/binary"
 	"os"
-	"reflect"
+	"slices"
 	"testing"
 
 	"github.com/sorairolake/abcrypt-go"
@@ -22,7 +22,7 @@ func TestEncrypt(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.NewEncryptor(data, []byte(passphrase)).Encrypt()
-	if reflect.DeepEqual(ciphertext, data) {
+	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
 
@@ -53,7 +53,7 @@ func TestEncrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }
@@ -67,7 +67,7 @@ func TestEncryptWithParams(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
-	if reflect.DeepEqual(ciphertext, data) {
+	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
 
@@ -98,7 +98,7 @@ func TestEncryptWithParams(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }
@@ -127,7 +127,7 @@ func TestEncryptMagicNumber(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
-	if expected := []byte("abcrypt"); !reflect.DeepEqual(ciphertext[:7], expected) {
+	if expected := []byte("abcrypt"); !slices.Equal(ciphertext[:7], expected) {
 		t.Errorf("expected magic number `%v`, got `%v`", expected, ciphertext[:7])
 	}
 }
@@ -197,7 +197,7 @@ func TestConvenientEncrypt(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.Encrypt(data, []byte(passphrase))
-	if reflect.DeepEqual(ciphertext, data) {
+	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
 
@@ -223,7 +223,7 @@ func TestConvenientEncrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }
@@ -237,7 +237,7 @@ func TestConvenientEncryptWithParams(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.EncryptWithParams(data, []byte(passphrase), 32, 3, 4)
-	if reflect.DeepEqual(ciphertext, data) {
+	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
 
@@ -263,7 +263,7 @@ func TestConvenientEncryptWithParams(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }

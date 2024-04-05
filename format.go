@@ -7,11 +7,14 @@ package abcrypt
 import (
 	"crypto/rand"
 	"encoding/binary"
-	"reflect"
+	"slices"
 
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/chacha20poly1305"
 )
+
+const magicNumber = "abcrypt"
+const magicNumberSize = 7
 
 type version uint8
 
@@ -20,10 +23,7 @@ const (
 	version1
 )
 
-const (
-	magicNumberSize = 7
-	saltSize        = 32
-)
+const saltSize = 32
 
 type header struct {
 	magicNumber [magicNumberSize]byte
@@ -35,8 +35,6 @@ type header struct {
 	nonce       [chacha20poly1305.NonceSizeX]byte
 	mac         [blake2b.Size]byte
 }
-
-const magicNumber = "abcrypt"
 
 func newHeader(memoryCost, timeCost, parallelism uint32) *header {
 	var header header
@@ -71,7 +69,7 @@ func parse(data []byte) (*header, error) {
 
 	var header header
 
-	if !reflect.DeepEqual(data[:7], []byte(magicNumber)) {
+	if !slices.Equal(data[:7], []byte(magicNumber)) {
 		return nil, ErrInvalidMagicNumber
 	}
 
@@ -114,7 +112,7 @@ func (h *header) verifyMAC(key, tag []byte) error {
 	header := h.asBytes()
 	mac.Write(header[:76])
 
-	if !reflect.DeepEqual(mac.Sum(nil), tag) {
+	if !slices.Equal(mac.Sum(nil), tag) {
 		return ErrInvalidHeaderMAC
 	}
 
