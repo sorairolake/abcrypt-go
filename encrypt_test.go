@@ -16,7 +16,7 @@ import (
 func TestEncrypt(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,7 +61,7 @@ func TestEncrypt(t *testing.T) {
 func TestEncryptWithParams(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,7 +121,7 @@ func TestEncryptMinimumOutputLength(t *testing.T) {
 func TestEncryptMagicNumber(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func TestEncryptMagicNumber(t *testing.T) {
 func TestEncryptVersion(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,7 @@ func TestEncryptVersion(t *testing.T) {
 func TestEncryptParams(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -175,7 +175,7 @@ func TestEncryptParams(t *testing.T) {
 func TestEncryptorOutLen(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -191,7 +191,7 @@ func TestEncryptorOutLen(t *testing.T) {
 func TestConvenientEncrypt(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -231,7 +231,7 @@ func TestConvenientEncrypt(t *testing.T) {
 func TestConvenientEncryptWithParams(t *testing.T) {
 	t.Parallel()
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}

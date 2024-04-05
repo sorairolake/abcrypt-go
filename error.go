@@ -13,9 +13,11 @@ var (
 	// ErrInvalidLength represents an error due to the encrypted data was
 	// shorter than 156 bytes.
 	ErrInvalidLength = errors.New("abcrypt: encrypted data is shorter than 156 bytes")
+
 	// ErrInvalidMagicNumber represents an error due to the magic number
 	// (file signature) was invalid.
 	ErrInvalidMagicNumber = errors.New("abcrypt: invalid magic number")
+
 	// ErrInvalidHeaderMAC represents an error due to the MAC
 	// (authentication tag) of the header was invalid.
 	ErrInvalidHeaderMAC = errors.New("abcrypt: invalid header MAC")

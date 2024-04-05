@@ -17,12 +17,12 @@ import (
 func TestDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestDecrypt(t *testing.T) {
 func TestDecryptIncorrectPassphrase(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -87,7 +87,7 @@ func TestDecryptInvalidInputLength(t *testing.T) {
 func TestDecryptInvalidMagicNumber(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,7 +107,7 @@ func TestDecryptInvalidMagicNumber(t *testing.T) {
 func TestDecryptUnknownVersion(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -132,7 +132,7 @@ func TestDecryptUnknownVersion(t *testing.T) {
 func TestDecryptInvalidHeaderMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -154,7 +154,7 @@ func TestDecryptInvalidHeaderMAC(t *testing.T) {
 func TestDecryptInvalidMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -188,12 +188,12 @@ func TestDecryptInvalidMAC(t *testing.T) {
 func TestDecryptOutLen(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -211,12 +211,12 @@ func TestDecryptOutLen(t *testing.T) {
 func TestConvenientDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("tests/data/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	data, err := os.ReadFile("tests/data/data.txt")
+	data, err := os.ReadFile("testdata/data.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
