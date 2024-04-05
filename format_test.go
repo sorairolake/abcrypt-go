@@ -5,10 +5,28 @@
 package abcrypt_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/sorairolake/abcrypt-go"
 )
+
+func TestMagicNumber(t *testing.T) {
+	t.Parallel()
+
+	expected := [abcrypt.MagicNumberSize]byte{0x61, 0x62, 0x63, 0x72, 0x79, 0x70, 0x74}
+	if !slices.Equal([]byte(abcrypt.MagicNumber), expected[:]) {
+		t.Error("unexpected magic number")
+	}
+}
+
+func TestMagicNumberSize(t *testing.T) {
+	t.Parallel()
+
+	if size := abcrypt.MagicNumberSize; size != 7 {
+		t.Errorf("expected magic number size `%v`, got `%v`", 7, size)
+	}
+}
 
 func TestVersion(t *testing.T) {
 	t.Parallel()
@@ -22,11 +40,10 @@ func TestVersion(t *testing.T) {
 	}
 }
 
-func TestMagicNumber(t *testing.T) {
+func TestSaltSize(t *testing.T) {
 	t.Parallel()
 
-	expected := [7]byte{0x61, 0x62, 0x63, 0x72, 0x79, 0x70, 0x74}
-	if abcrypt.MagicNumber != string(expected[:]) {
-		t.Error("unexpected magic number")
+	if size := abcrypt.SaltSize; size != 32 {
+		t.Errorf("expected salt size `%v`, got `%v`", 32, size)
 	}
 }

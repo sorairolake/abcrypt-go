@@ -4,9 +4,12 @@
 
 package abcrypt
 
+const MagicNumber = magicNumber
+const MagicNumberSize = magicNumberSize
+
 const (
 	Version0 = version0
 	Version1 = version1
 )
 
-const MagicNumber = magicNumber
+const SaltSize = saltSize

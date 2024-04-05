@@ -7,7 +7,6 @@ package abcrypt_test
 import (
 	"errors"
 	"os"
-	"reflect"
 	"slices"
 	"testing"
 
@@ -37,7 +36,7 @@ func TestDecrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }
@@ -226,7 +225,7 @@ func TestConvenientDecrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !reflect.DeepEqual(plaintext, data) {
+	if !slices.Equal(plaintext, data) {
 		t.Error("unexpected mismatch between plaintext and test data")
 	}
 }
