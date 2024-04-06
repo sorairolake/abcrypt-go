@@ -7,6 +7,7 @@ package abcrypt_test
 import (
 	"errors"
 	"math"
+	"slices"
 	"testing"
 
 	"github.com/sorairolake/abcrypt-go"
@@ -45,16 +46,25 @@ func TestUnknownVersionError(t *testing.T) {
 	if err.Error() != expected {
 		t.Error("unexpected error message")
 	}
+
+	if v := err.Version; v != math.MaxUint8 {
+		t.Errorf("expected unknown version number `%v`, got `%v`", math.MaxUint8, v)
+	}
 }
 
-func TestErrInvalidHeaderMAC(t *testing.T) {
+func TestInvalidHeaderMACError(t *testing.T) {
 	t.Parallel()
 
-	err := abcrypt.ErrInvalidHeaderMAC
+	var mac [64]byte
+	err := abcrypt.InvalidHeaderMACError{mac}
 	expected := "abcrypt: invalid header MAC"
 
 	if err.Error() != expected {
 		t.Error("unexpected error message")
+	}
+
+	if inner := err.MAC[:]; !slices.Equal(inner, mac[:]) {
+		t.Errorf("expected invalid header MAC `%v`, got `%v`", mac, inner)
 	}
 }
 

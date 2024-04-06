@@ -54,8 +54,13 @@ func TestDecryptIncorrectPassphrase(t *testing.T) {
 		t.Fatal("unexpected success")
 	}
 
-	if !errors.Is(err, abcrypt.ErrInvalidHeaderMAC) {
-		t.Error("unexpected error type")
+	var invalidHeaderMACError *abcrypt.InvalidHeaderMACError
+	if !errors.As(err, &invalidHeaderMACError) {
+		t.Fatal("unexpected error type")
+	}
+
+	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[76:140]) {
+		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[76:140], mac)
 	}
 }
 
@@ -145,8 +150,13 @@ func TestDecryptInvalidHeaderMAC(t *testing.T) {
 		t.Fatal("unexpected success")
 	}
 
-	if !errors.Is(err, abcrypt.ErrInvalidHeaderMAC) {
-		t.Error("unexpected error type")
+	var invalidHeaderMACError *abcrypt.InvalidHeaderMACError
+	if !errors.As(err, &invalidHeaderMACError) {
+		t.Fatal("unexpected error type")
+	}
+
+	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[76:140]) {
+		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[76:140], mac)
 	}
 }
 

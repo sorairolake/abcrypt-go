@@ -17,10 +17,6 @@ var (
 	// ErrInvalidMagicNumber represents an error due to the magic number
 	// (file signature) was invalid.
 	ErrInvalidMagicNumber = errors.New("abcrypt: invalid magic number")
-
-	// ErrInvalidHeaderMAC represents an error due to the MAC
-	// (authentication tag) of the header was invalid.
-	ErrInvalidHeaderMAC = errors.New("abcrypt: invalid header MAC")
 )
 
 // UnknownVersionError represents an error due to the version was the
@@ -31,6 +27,16 @@ type UnknownVersionError struct {
 
 func (e *UnknownVersionError) Error() string {
 	return fmt.Sprintf("abcrypt: unknown version number `%v`", e.Version)
+}
+
+// InvalidHeaderMACError represents an error due to the MAC (authentication
+// tag) of the header was invalid.
+type InvalidHeaderMACError struct {
+	MAC [64]byte
+}
+
+func (e *InvalidHeaderMACError) Error() string {
+	return "abcrypt: invalid header MAC"
 }
 
 // InvalidMACError represents an error due to the MAC (authentication tag) of
