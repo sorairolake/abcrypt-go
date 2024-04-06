@@ -15,8 +15,14 @@ import (
 	"golang.org/x/term"
 )
 
+type options struct {
+	output string
+}
+
 func main() {
-	outputFlag := flag.String("o", "", "Output the result to a file")
+	opt := new(options)
+
+	flag.StringVar(&opt.output, "output", "", "Output the result to a file")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <FILE>\n", os.Args[0])
@@ -48,12 +54,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *outputFlag == "" {
+	if opt.output == "" {
 		if _, err := os.Stdout.Write(plaintext); err != nil {
 			log.Fatal(err)
 		}
 	} else {
-		if err := os.WriteFile(*outputFlag, plaintext, os.ModeType); err != nil {
+		if err := os.WriteFile(opt.output, plaintext, os.ModeType); err != nil {
 			log.Fatal(err)
 		}
 	}
