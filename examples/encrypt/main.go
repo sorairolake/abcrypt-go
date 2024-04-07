@@ -21,10 +21,18 @@ const (
 	defaultParallelism = 1
 )
 
+type options struct {
+	memoryCost  uint
+	timeCost    uint
+	parallelism uint
+}
+
 func main() {
-	memoryCostFlag := flag.Uint("m", defaultMemoryCost, "Set the memory size in KiB")
-	timeCostFlag := flag.Uint("t", defaultTimeCost, "Set the number of iterations")
-	parallelismFlag := flag.Uint("p", defaultParallelism, "Set the degree of parallelism")
+	opt := new(options)
+
+	flag.UintVar(&opt.memoryCost, "memory-cost", defaultMemoryCost, "Set the memory size in KiB")
+	flag.UintVar(&opt.timeCost, "time-cost", defaultTimeCost, "Set the number of iterations")
+	flag.UintVar(&opt.parallelism, "parallelism", defaultParallelism, "Set the degree of parallelism")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0])
@@ -51,9 +59,9 @@ func main() {
 	}
 	fmt.Println()
 
-	m := uint32(*memoryCostFlag)
-	t := uint32(*timeCostFlag)
-	p := uint8(*parallelismFlag)
+	m := uint32(opt.memoryCost)
+	t := uint32(opt.timeCost)
+	p := uint8(opt.parallelism)
 	ciphertext := abcrypt.EncryptWithParams(plaintext, passphrase, m, t, p)
 
 	if err := os.WriteFile(args[1], ciphertext, os.ModeType); err != nil {

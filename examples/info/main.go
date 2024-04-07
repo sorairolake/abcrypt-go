@@ -15,8 +15,14 @@ import (
 	"github.com/sorairolake/abcrypt-go"
 )
 
+type options struct {
+	json bool
+}
+
 func main() {
-	jsonFlag := flag.Bool("j", false, "Output the encryption parameters as JSON")
+	opt := new(options)
+
+	flag.BoolVar(&opt.json, "json", false, "Output the encryption parameters as JSON")
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] [FILE]\n", os.Args[0])
@@ -52,7 +58,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *jsonFlag {
+	if opt.json {
 		json, err := json.Marshal(params)
 		if err != nil {
 			log.Fatal(err)

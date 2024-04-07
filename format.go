@@ -113,7 +113,7 @@ func (h *header) verifyMAC(key, tag []byte) error {
 	mac.Write(header[:76])
 
 	if !slices.Equal(mac.Sum(nil), tag) {
-		return ErrInvalidHeaderMAC
+		return &InvalidHeaderMACError{[64]byte(tag)}
 	}
 
 	h.mac = [blake2b.Size]byte(tag)
