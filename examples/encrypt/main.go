@@ -12,34 +12,18 @@ import (
 	"syscall"
 
 	"github.com/sorairolake/abcrypt-go"
+	"github.com/sorairolake/abcrypt-go/examples"
 	"golang.org/x/term"
 )
 
-const (
-	defaultMemoryCost  = 19456
-	defaultTimeCost    = 2
-	defaultParallelism = 1
-)
-
-type options struct {
-	memoryCost  uint
-	timeCost    uint
-	parallelism uint
-}
-
 func main() {
-	opt := new(options)
-
-	flag.UintVar(&opt.memoryCost, "memory-cost", defaultMemoryCost, "Set the memory size in KiB")
-	flag.UintVar(&opt.timeCost, "time-cost", defaultTimeCost, "Set the number of iterations")
-	flag.UintVar(&opt.parallelism, "parallelism", defaultParallelism, "Set the degree of parallelism")
-
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0])
-		flag.PrintDefaults()
-	}
 	flag.Parse()
 	args := flag.Args()
+
+	if opt.version {
+		fmt.Printf("abcrypt-go %v\n", examples.Version)
+		os.Exit(0)
+	}
 
 	if flag.NArg() != 2 {
 		flag.Usage()
