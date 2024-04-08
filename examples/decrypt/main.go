@@ -12,24 +12,18 @@ import (
 	"syscall"
 
 	"github.com/sorairolake/abcrypt-go"
+	"github.com/sorairolake/abcrypt-go/examples"
 	"golang.org/x/term"
 )
 
-type options struct {
-	output string
-}
-
 func main() {
-	opt := new(options)
-
-	flag.StringVar(&opt.output, "output", "", "Output the result to a file")
-
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <FILE>\n", os.Args[0])
-		flag.PrintDefaults()
-	}
 	flag.Parse()
 	args := flag.Args()
+
+	if opt.version {
+		fmt.Printf("abcrypt-go %v\n", examples.Version)
+		os.Exit(0)
+	}
 
 	if flag.NArg() != 1 {
 		flag.Usage()

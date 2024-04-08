@@ -13,23 +13,17 @@ import (
 	"os"
 
 	"github.com/sorairolake/abcrypt-go"
+	"github.com/sorairolake/abcrypt-go/examples"
 )
 
-type options struct {
-	json bool
-}
-
 func main() {
-	opt := new(options)
-
-	flag.BoolVar(&opt.json, "json", false, "Output the encryption parameters as JSON")
-
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] [FILE]\n", os.Args[0])
-		flag.PrintDefaults()
-	}
 	flag.Parse()
 	args := flag.Args()
+
+	if opt.version {
+		fmt.Printf("abcrypt-go %v\n", examples.Version)
+		os.Exit(0)
+	}
 
 	var ciphertext []byte
 
