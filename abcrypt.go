@@ -9,11 +9,9 @@ package abcrypt
 
 import "golang.org/x/crypto/chacha20poly1305"
 
-const (
-	// HeaderSize is the number of bytes of the header.
-	HeaderSize = 140
+// HeaderSize is the number of bytes of the header.
+const HeaderSize = 140
 
-	// TagSize is the number of bytes of the MAC (authentication tag) of
-	// the ciphertext.
-	TagSize = chacha20poly1305.Overhead
-)
+// TagSize is the number of bytes of the MAC (authentication tag) of the
+// ciphertext.
+const TagSize = chacha20poly1305.Overhead
