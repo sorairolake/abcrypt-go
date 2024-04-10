@@ -21,7 +21,7 @@ var ErrInvalidMagicNumber = errors.New("abcrypt: invalid magic number")
 // unrecognized abcrypt version number.
 type UnknownVersionError struct {
 	// Version represents the obtained version number.
-	Version uint8
+	Version byte
 }
 
 // Error returns a string representation of an [UnknownVersionError].

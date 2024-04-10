@@ -16,7 +16,7 @@ import (
 const magicNumber = "abcrypt"
 const magicNumberSize = 7
 
-type version uint8
+type version byte
 
 const (
 	version0 version = iota
