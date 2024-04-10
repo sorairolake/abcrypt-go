@@ -6,4 +6,4 @@
 package examples
 
 // Version represents the version number of the module.
-const Version = "0.2.1"
+const Version = "0.2.2"
