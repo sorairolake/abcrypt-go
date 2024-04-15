@@ -25,5 +25,15 @@ An example of reading the Argon2 parameters.
 To build these programs run the following in the project root directory.
 
 ```sh
-go build -o . ./...
+# `encrypt` example
+just build-encrypt-example
+
+# `decrypt` example
+just build-decrypt-example
+
+# `info` example
+just build-info-example
+
+# all examples
+just build-examples
 ```

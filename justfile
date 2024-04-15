@@ -41,6 +41,22 @@ lint: vet staticcheck
 @staticcheck:
     staticcheck ./...
 
+# Build `encrypt` example
+@build-encrypt-example:
+    go build ./examples/encrypt
+
+# Build `decrypt` example
+@build-decrypt-example:
+    go build ./examples/decrypt
+
+# Build `info` example
+@build-info-example:
+    go build ./examples/info
+
+# Build the examples
+@build-examples:
+    go build -o . ./examples/{decrypt,encrypt,info}
+
 # Run the linter for GitHub Actions workflow files
 @lint-github-actions:
     actionlint -verbose
