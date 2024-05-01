@@ -11,3 +11,8 @@
 
 # Test binary, built with `go test -c`
 *.test
+
+# Example binaries
+/decrypt
+/encrypt
+/info
