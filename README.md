@@ -32,6 +32,16 @@ See the [documentation][reference-url] for more details.
 
 This library requires the minimum version of Go 1.21.
 
+## Source code
+
+The upstream repository is available at
+<https://github.com/sorairolake/abcrypt-go.git>.
+
+The source code is also available at:
+
+- <https://gitlab.com/sorairolake/abcrypt-go.git>
+- <https://codeberg.org/sorairolake/abcrypt-go.git>
+
 ## Changelog
 
 Please see [CHANGELOG.adoc].
