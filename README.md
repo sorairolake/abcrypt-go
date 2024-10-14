@@ -20,10 +20,6 @@ To install this library:
 go get -u github.com/sorairolake/abcrypt-go
 ```
 
-### Example
-
-Please see [`example_test.go`].
-
 ### Documentation
 
 See the [documentation][reference-url] for more details.
@@ -67,7 +63,6 @@ licensing information.
 [reference-url]: https://pkg.go.dev/github.com/sorairolake/abcrypt-go
 [go-version-badge]: https://img.shields.io/github/go-mod/go-version/sorairolake/abcrypt-go?style=for-the-badge&logo=go
 [abcrypt encrypted data format]: https://sorairolake.github.io/abcrypt/book/format.html
-[`example_test.go`]: example_test.go
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
 [AUTHORS.adoc]: AUTHORS.adoc
