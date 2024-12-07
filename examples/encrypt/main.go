@@ -43,10 +43,26 @@ func main() {
 	}
 	fmt.Println()
 
+	var argon2Type abcrypt.Argon2Type
+	switch t := uint32(opt.argon2Type); t {
+	case 0, 1, 2:
+		argon2Type = abcrypt.Argon2Type(t)
+	default:
+		log.Fatal("invalid Argon2 type")
+	}
+
+	var argon2Version abcrypt.Argon2Version
+	switch v := uint32(opt.argon2Version); v {
+	case 0x10, 0x13:
+		argon2Version = abcrypt.Argon2Version(v)
+	default:
+		log.Fatal("invalid Argon2 version")
+	}
+
 	m := uint32(opt.memoryCost)
 	t := uint32(opt.timeCost)
 	p := uint8(opt.parallelism)
-	ciphertext := abcrypt.EncryptWithParams(plaintext, passphrase, m, t, p)
+	ciphertext := abcrypt.EncryptWithVersion(plaintext, passphrase, argon2Type, argon2Version, m, t, p)
 
 	if err := os.WriteFile(args[1], ciphertext, os.ModeType); err != nil {
 		log.Fatal(err)

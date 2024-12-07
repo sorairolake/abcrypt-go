@@ -12,6 +12,8 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 
 **abcrypt-go** is an implementation of the [abcrypt encrypted data format].
 
+This package supports the abcrypt version 1 file format.
+
 ## Usage
 
 To install this library:

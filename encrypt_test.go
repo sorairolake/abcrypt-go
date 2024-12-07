@@ -103,6 +103,96 @@ func TestEncryptWithParams(t *testing.T) {
 	}
 }
 
+func TestEncryptWithType(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.NewEncryptorWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
+	if slices.Equal(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if memoryCost := params.MemoryCost; memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+
+	if timeCost := params.TimeCost; timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+
+	if parallelism := params.Parallelism; parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	cipher, err := abcrypt.NewDecryptor(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	plaintext, err := cipher.Decrypt()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !slices.Equal(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
+func TestEncryptWithVersion(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.NewEncryptorWithVersion(data, []byte(passphrase), abcrypt.Argon2id, abcrypt.Version0x13, 32, 3, 4).Encrypt()
+	if slices.Equal(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if memoryCost := params.MemoryCost; memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+
+	if timeCost := params.TimeCost; timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+
+	if parallelism := params.Parallelism; parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	cipher, err := abcrypt.NewDecryptor(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	plaintext, err := cipher.Decrypt()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !slices.Equal(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
 func TestEncryptMinimumOutputLength(t *testing.T) {
 	t.Parallel()
 
@@ -141,8 +231,40 @@ func TestEncryptVersion(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
-	if ciphertext[7] != 0 {
-		t.Errorf("expected version `%v`, got `%v`", 0, ciphertext[7])
+	if ciphertext[7] != 1 {
+		t.Errorf("expected version `%v`, got `%v`", 1, ciphertext[7])
+	}
+}
+
+func TestEncryptArgon2Type(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.NewEncryptorWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
+
+	argon2Type := binary.LittleEndian.Uint32(ciphertext[8:12])
+	if argon2Type != 1 {
+		t.Errorf("expected Argon2 type `%v`, got `%v`", 1, argon2Type)
+	}
+}
+
+func TestEncryptArgon2Version(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.NewEncryptorWithVersion(data, []byte(passphrase), abcrypt.Argon2id, abcrypt.Version0x13, 32, 3, 4).Encrypt()
+
+	argon2Version := binary.LittleEndian.Uint32(ciphertext[12:16])
+	if argon2Version != 0x13 {
+		t.Errorf("expected Argon2 version `%#x`, got `%#x`", 0x13, argon2Version)
 	}
 }
 
@@ -156,17 +278,17 @@ func TestEncryptParams(t *testing.T) {
 
 	ciphertext := abcrypt.NewEncryptorWithParams(data, []byte(passphrase), 32, 3, 4).Encrypt()
 
-	memoryCost := binary.LittleEndian.Uint32(ciphertext[8:12])
+	memoryCost := binary.LittleEndian.Uint32(ciphertext[16:20])
 	if memoryCost != 32 {
 		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
 	}
 
-	timeCost := binary.LittleEndian.Uint32(ciphertext[12:16])
+	timeCost := binary.LittleEndian.Uint32(ciphertext[20:24])
 	if timeCost != 3 {
 		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
 	}
 
-	parallelism := binary.LittleEndian.Uint32(ciphertext[16:20])
+	parallelism := binary.LittleEndian.Uint32(ciphertext[24:28])
 	if parallelism != 4 {
 		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
 	}
@@ -237,6 +359,86 @@ func TestConvenientEncryptWithParams(t *testing.T) {
 	}
 
 	ciphertext := abcrypt.EncryptWithParams(data, []byte(passphrase), 32, 3, 4)
+	if slices.Equal(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if memoryCost := params.MemoryCost; memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+
+	if timeCost := params.TimeCost; timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+
+	if parallelism := params.Parallelism; parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !slices.Equal(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
+func TestConvenientEncryptWithType(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.EncryptWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4)
+	if slices.Equal(ciphertext, data) {
+		t.Fatal("unexpected match between ciphertext and test data")
+	}
+
+	params, err := abcrypt.NewParams(ciphertext)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if memoryCost := params.MemoryCost; memoryCost != 32 {
+		t.Errorf("expected memoryCost `%v`, got `%v`", 32, memoryCost)
+	}
+
+	if timeCost := params.TimeCost; timeCost != 3 {
+		t.Errorf("expected timeCost `%v`, got `%v`", 3, timeCost)
+	}
+
+	if parallelism := params.Parallelism; parallelism != 4 {
+		t.Errorf("expected parallelism `%v`, got `%v`", 4, parallelism)
+	}
+
+	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !slices.Equal(plaintext, data) {
+		t.Error("unexpected mismatch between plaintext and test data")
+	}
+}
+
+func TestConvenientEncryptWithVersion(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile("testdata/data.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ciphertext := abcrypt.EncryptWithVersion(data, []byte(passphrase), abcrypt.Argon2id, abcrypt.Version0x13, 32, 3, 4)
 	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}

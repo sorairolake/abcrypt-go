@@ -40,6 +40,34 @@ func TestVersion(t *testing.T) {
 	}
 }
 
+func TestArgon2Type(t *testing.T) {
+	t.Parallel()
+
+	if argon2d := abcrypt.Argon2d; argon2d != 0 {
+		t.Errorf("expected Argon2 type `%v`, got `%v`", 0, argon2d)
+	}
+
+	if argon2i := abcrypt.Argon2i; argon2i != 1 {
+		t.Errorf("expected Argon2 type `%v`, got `%v`", 1, argon2i)
+	}
+
+	if argon2id := abcrypt.Argon2id; argon2id != 2 {
+		t.Errorf("expected Argon2 type `%v`, got `%v`", 2, argon2id)
+	}
+}
+
+func TestArgon2Version(t *testing.T) {
+	t.Parallel()
+
+	if v0x10 := abcrypt.Version0x10; v0x10 != 0x10 {
+		t.Errorf("expected Argon2 version `%#x`, got `%#x`", 0x10, v0x10)
+	}
+
+	if v0x13 := abcrypt.Version0x13; v0x13 != 0x13 {
+		t.Errorf("expected Argon2 version `%#x`, got `%#x`", 0x13, v0x13)
+	}
+}
+
 func TestSaltSize(t *testing.T) {
 	t.Parallel()
 

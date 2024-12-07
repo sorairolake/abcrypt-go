@@ -4,13 +4,15 @@
 
 // Package abcrypt implements the [abcrypt encrypted data format].
 //
+// This package supports the abcrypt version 1 file format.
+//
 // [abcrypt encrypted data format]: https://sorairolake.github.io/abcrypt/book/format.html
 package abcrypt
 
 import "golang.org/x/crypto/chacha20poly1305"
 
 // HeaderSize is the number of bytes of the header.
-const HeaderSize = 140
+const HeaderSize = 148
 
 // TagSize is the number of bytes of the MAC (authentication tag) of the
 // ciphertext.

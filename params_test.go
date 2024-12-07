@@ -15,7 +15,7 @@ import (
 func TestParams(t *testing.T) {
 	t.Parallel()
 
-	ciphertext, err := os.ReadFile("testdata/data.txt.abcrypt")
+	ciphertext, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func TestParams(t *testing.T) {
 func TestParamsMarshalJSON(t *testing.T) {
 	t.Parallel()
 
-	ciphertext, err := os.ReadFile("testdata/data.txt.abcrypt")
+	ciphertext, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}

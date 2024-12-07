@@ -16,7 +16,7 @@ import (
 func TestDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +44,7 @@ func TestDecrypt(t *testing.T) {
 func TestDecryptIncorrectPassphrase(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,8 +59,8 @@ func TestDecryptIncorrectPassphrase(t *testing.T) {
 		t.Fatal("unexpected error type")
 	}
 
-	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[76:140]) {
-		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[76:140], mac)
+	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[84:148]) {
+		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[84:148], mac)
 	}
 }
 
@@ -91,7 +91,7 @@ func TestDecryptInvalidInputLength(t *testing.T) {
 func TestDecryptInvalidMagicNumber(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -108,15 +108,38 @@ func TestDecryptInvalidMagicNumber(t *testing.T) {
 	}
 }
 
-func TestDecryptUnknownVersion(t *testing.T) {
+func TestDecryptUnsupportedVersion(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v0/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	dataEnc[7] = 1
+	_, err = abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
+	if err == nil {
+		t.Fatal("unexpected success")
+	}
+
+	var unsupportedVersionError *abcrypt.UnsupportedVersionError
+	if !errors.As(err, &unsupportedVersionError) {
+		t.Fatal("unexpected error type")
+	}
+
+	if v := unsupportedVersionError.Version; v != 0 {
+		t.Errorf("expected unsupported version number `%v`, got `%v`", 0, v)
+	}
+}
+
+func TestDecryptUnknownVersion(t *testing.T) {
+	t.Parallel()
+
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dataEnc[7] = 2
 
 	_, err = abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
 	if err == nil {
@@ -128,22 +151,22 @@ func TestDecryptUnknownVersion(t *testing.T) {
 		t.Fatal("unexpected error type")
 	}
 
-	if v := unknownVersionError.Version; v != 1 {
-		t.Errorf("expected unrecognized version number `%v`, got `%v`", 1, v)
+	if v := unknownVersionError.Version; v != 2 {
+		t.Errorf("expected unrecognized version number `%v`, got `%v`", 2, v)
 	}
 }
 
 func TestDecryptInvalidHeaderMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	headerMAC := dataEnc[76:140]
+	headerMAC := dataEnc[84:148]
 	slices.Reverse(headerMAC)
-	copy(dataEnc[76:140], headerMAC)
+	copy(dataEnc[84:148], headerMAC)
 
 	_, err = abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
 	if err == nil {
@@ -155,15 +178,15 @@ func TestDecryptInvalidHeaderMAC(t *testing.T) {
 		t.Fatal("unexpected error type")
 	}
 
-	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[76:140]) {
-		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[76:140], mac)
+	if mac := invalidHeaderMACError.MAC[:]; !slices.Equal(mac, dataEnc[84:148]) {
+		t.Errorf("expected invalid header MAC `%v`, got `%v`", dataEnc[84:148], mac)
 	}
 }
 
 func TestDecryptInvalidMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -197,7 +220,7 @@ func TestDecryptInvalidMAC(t *testing.T) {
 func TestDecryptOutLen(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -220,7 +243,7 @@ func TestDecryptOutLen(t *testing.T) {
 func TestConvenientDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
