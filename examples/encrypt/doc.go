@@ -20,8 +20,6 @@
 //
 //	-argon2-type <TYPE>
 //		Set the Argon2 type.
-//	-argon2-version <VERSION>
-//		Set the Argon2 version.
 //	-memory-cost <NUM>
 //		Set the memory size in KiB.
 //	-time-cost <NUM>

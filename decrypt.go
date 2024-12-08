@@ -26,14 +26,8 @@ func NewDecryptor(ciphertext, passphrase []byte) (*Decryptor, error) {
 		return nil, err
 	}
 
-	if header.argon2Type == Argon2d {
-		msg := "abcrypt: Argon2d is not supported"
-		panic(msg)
-	}
-
-	if header.argon2Version == Version0x10 {
-		msg := "abcrypt: version 0x10 is not supported"
-		panic(msg)
+	if header.argon2Version == version0x10 {
+		panic("abcrypt: version 0x10 is not supported")
 	}
 
 	if header.parallelism > math.MaxUint8 {
@@ -49,8 +43,8 @@ func NewDecryptor(ciphertext, passphrase []byte) (*Decryptor, error) {
 	var k []byte
 
 	switch header.argon2Type {
-	case Argon2d:
-		panic("abcrypt: entered unreachable code")
+	case argon2d:
+		panic("abcrypt: Argon2d is not supported")
 	case Argon2i:
 		k = argon2.Key(passphrase, s, t, m, p, derivedKeySize)
 	case Argon2id:

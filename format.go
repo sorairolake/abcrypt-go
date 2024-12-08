@@ -29,8 +29,8 @@ const (
 type Argon2Type uint32
 
 const (
-	// Argon2d indicates Argon2d.
-	Argon2d Argon2Type = iota
+	// argon2d indicates Argon2d.
+	argon2d Argon2Type = iota
 
 	// Argon2i indicates Argon2i.
 	Argon2i
@@ -39,15 +39,15 @@ const (
 	Argon2id
 )
 
-// Argon2Version is a type that represents the Argon2 version.
-type Argon2Version uint32
+// argon2Version is a type that represents the Argon2 version.
+type argon2Version uint32
 
 const (
-	// Version0x10 indicates version 0x10.
-	Version0x10 Argon2Version = 0x10
+	// version0x10 indicates version 0x10.
+	version0x10 argon2Version = 0x10
 
-	// Version0x13 indicates version 0x13.
-	Version0x13 Argon2Version = 0x13
+	// version0x13 indicates version 0x13.
+	version0x13 argon2Version = 0x13
 )
 
 const saltSize = 32
@@ -56,7 +56,7 @@ type header struct {
 	magicNumber   [magicNumberSize]byte
 	version       version
 	argon2Type    Argon2Type
-	argon2Version Argon2Version
+	argon2Version argon2Version
 	memoryCost    uint32
 	timeCost      uint32
 	parallelism   uint32
@@ -65,13 +65,26 @@ type header struct {
 	mac           [blake2b.Size]byte
 }
 
-func newHeader(argon2Type Argon2Type, argon2Version Argon2Version, memoryCost, timeCost, parallelism uint32) *header {
+func newHeader(argon2Type Argon2Type, argon2Version argon2Version, memoryCost, timeCost, parallelism uint32) *header {
 	var header header
 
 	header.magicNumber = [magicNumberSize]byte([]byte(magicNumber))
 	header.version = version1
-	header.argon2Type = argon2Type
-	header.argon2Version = argon2Version
+
+	switch argon2Type {
+	case argon2d, Argon2i, Argon2id:
+		header.argon2Type = argon2Type
+	default:
+		panic("abcrypt: invalid Argon2 type")
+	}
+
+	switch argon2Version {
+	case version0x10, version0x13:
+		header.argon2Version = argon2Version
+	default:
+		panic("abcrypt: invalid Argon2 version")
+	}
+
 	header.memoryCost = memoryCost
 	header.timeCost = timeCost
 	header.parallelism = parallelism
@@ -106,27 +119,27 @@ func parse(data []byte) (*header, error) {
 
 	header.magicNumber = [magicNumberSize]byte([]byte(magicNumber))
 
-	switch v := data[7]; v {
-	case 0:
-		return nil, &UnsupportedVersionError{v}
-	case 1:
-		header.version = version(v)
+	switch v := version(data[7]); v {
+	case version0:
+		return nil, &UnsupportedVersionError{byte(v)}
+	case version1:
+		header.version = v
 	default:
-		return nil, &UnknownVersionError{v}
+		return nil, &UnknownVersionError{byte(v)}
 	}
 
-	switch t := binary.LittleEndian.Uint32(data[8:12]); t {
-	case 0, 1, 2:
-		header.argon2Type = Argon2Type(t)
+	switch t := Argon2Type(binary.LittleEndian.Uint32(data[8:12])); t {
+	case argon2d, Argon2i, Argon2id:
+		header.argon2Type = t
 	default:
-		return nil, &InvalidArgon2TypeError{t}
+		return nil, &InvalidArgon2TypeError{uint32(t)}
 	}
 
-	switch v := binary.LittleEndian.Uint32(data[12:16]); v {
-	case 0x10, 0x13:
-		header.argon2Version = Argon2Version(v)
+	switch v := argon2Version(binary.LittleEndian.Uint32(data[12:16])); v {
+	case version0x10, version0x13:
+		header.argon2Version = v
 	default:
-		return nil, &InvalidArgon2VersionError{v}
+		return nil, &InvalidArgon2VersionError{uint32(v)}
 	}
 
 	header.memoryCost = binary.LittleEndian.Uint32(data[16:20])

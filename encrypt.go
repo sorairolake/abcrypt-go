@@ -11,13 +11,10 @@ import (
 
 const (
 	defaultArgon2Type    = Argon2id
-	defaultArgon2Version = Version0x13
-)
-
-const (
-	defaultMemoryCost  = 19456
-	defaultTimeCost    = 2
-	defaultParallelism = 1
+	defaultArgon2Version = version0x13
+	defaultMemoryCost    = 19456
+	defaultTimeCost      = 2
+	defaultParallelism   = 1
 )
 
 // Encryptor represents an encryptor for the abcrypt encrypted data format.
@@ -49,22 +46,10 @@ func NewEncryptorWithParams(plaintext, passphrase []byte, memoryCost, timeCost u
 //
 // This uses version 0x13 as the Argon2 version.
 func NewEncryptorWithType(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
-	return NewEncryptorWithVersion(plaintext, passphrase, argon2Type, defaultArgon2Version, memoryCost, timeCost, parallelism)
-}
+	header := newHeader(argon2Type, defaultArgon2Version, memoryCost, timeCost, uint32(parallelism))
 
-// NewEncryptorWithVersion creates a new [Encryptor] with the given Argon2
-// type, Argon2 version and Argon2 parameters.
-func NewEncryptorWithVersion(plaintext, passphrase []byte, argon2Type Argon2Type, argon2Version Argon2Version, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
-	header := newHeader(argon2Type, argon2Version, memoryCost, timeCost, uint32(parallelism))
-
-	if header.argon2Type == Argon2d {
-		msg := "abcrypt: Argon2d is not supported"
-		panic(msg)
-	}
-
-	if header.argon2Version == Version0x10 {
-		msg := "abcrypt: version 0x10 is not supported"
-		panic(msg)
+	if header.argon2Version == version0x10 {
+		panic("abcrypt: version 0x10 is not supported")
 	}
 
 	s := header.salt[:]
@@ -75,8 +60,8 @@ func NewEncryptorWithVersion(plaintext, passphrase []byte, argon2Type Argon2Type
 	var k []byte
 
 	switch header.argon2Type {
-	case Argon2d:
-		panic("abcrypt: entered unreachable code")
+	case argon2d:
+		panic("abcrypt: Argon2d is not supported")
 	case Argon2i:
 		k = argon2.Key(passphrase, s, t, m, p, derivedKeySize)
 	case Argon2id:
@@ -145,13 +130,4 @@ func EncryptWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32
 // [Encryptor.Encrypt].
 func EncryptWithType(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) []byte {
 	return NewEncryptorWithType(plaintext, passphrase, argon2Type, memoryCost, timeCost, parallelism).Encrypt()
-}
-
-// EncryptWithVersion encrypts the plaintext with the given Argon2 type, Argon2
-// version and Argon2 parameters and returns the ciphertext.
-//
-// This is a convenience function for using [NewEncryptorWithVersion] and
-// [Encryptor.Encrypt].
-func EncryptWithVersion(plaintext, passphrase []byte, argon2Type Argon2Type, argon2Version Argon2Version, memoryCost, timeCost uint32, parallelism uint8) []byte {
-	return NewEncryptorWithVersion(plaintext, passphrase, argon2Type, argon2Version, memoryCost, timeCost, parallelism).Encrypt()
 }
