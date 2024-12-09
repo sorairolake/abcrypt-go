@@ -18,10 +18,15 @@ const (
 	magicNumberSize = 7
 )
 
+// version is a type that represents the version of the abcrypt encrypted data
+// format.
 type version byte
 
 const (
+	// version0 indicates version 0.
 	version0 version = iota
+
+	// version1 indicates version 1.
 	version1
 )
 
