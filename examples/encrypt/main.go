@@ -47,7 +47,7 @@ func main() {
 	m := uint32(opt.memoryCost)
 	t := uint32(opt.timeCost)
 	p := uint8(opt.parallelism)
-	ciphertext := abcrypt.EncryptWithType(plaintext, passphrase, argon2Type, m, t, p)
+	ciphertext := abcrypt.EncryptWithContext(plaintext, passphrase, argon2Type, m, t, p)
 
 	if err := os.WriteFile(args[1], ciphertext, os.ModeType); err != nil {
 		log.Fatal(err)

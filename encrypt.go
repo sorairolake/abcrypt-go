@@ -26,9 +26,11 @@ type Encryptor struct {
 
 // NewEncryptor creates a new [Encryptor].
 //
-// This uses the [recommended Argon2 parameters].
+// This uses the recommended Argon2 parameters according to the [OWASP Password
+// Storage Cheat Sheet]. This also uses Argon2id as the Argon2 type and version
+// 0x13 as the Argon2 version.
 //
-// [recommended Argon2 parameters]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+// [OWASP Password Storage Cheat Sheet]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#argon2id
 func NewEncryptor(plaintext, passphrase []byte) *Encryptor {
 	return NewEncryptorWithParams(plaintext, passphrase, defaultMemoryCost, defaultTimeCost, defaultParallelism)
 }
@@ -36,16 +38,16 @@ func NewEncryptor(plaintext, passphrase []byte) *Encryptor {
 // NewEncryptorWithParams creates a new [Encryptor] with the given Argon2
 // parameters.
 //
-// This uses Argon2id as the Argon2 type.
+// This uses Argon2id as the Argon2 type and version 0x13 as the Argon2 version.
 func NewEncryptorWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
-	return NewEncryptorWithType(plaintext, passphrase, defaultArgon2Type, memoryCost, timeCost, parallelism)
+	return NewEncryptorWithContext(plaintext, passphrase, defaultArgon2Type, memoryCost, timeCost, parallelism)
 }
 
-// NewEncryptorWithType creates a new [Encryptor] with the given Argon2 type
+// NewEncryptorWithContext creates a new [Encryptor] with the given Argon2 type
 // and Argon2 parameters.
 //
 // This uses version 0x13 as the Argon2 version.
-func NewEncryptorWithType(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
+func NewEncryptorWithContext(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) *Encryptor {
 	header := newHeader(argon2Type, defaultArgon2Version, memoryCost, timeCost, uint32(parallelism))
 
 	if header.argon2Version == version0x10 {
@@ -100,12 +102,14 @@ func (e *Encryptor) OutLen() int {
 
 // Encrypt encrypts the plaintext and returns the ciphertext.
 //
-// This uses the [recommended Argon2 parameters].
+// This uses the recommended Argon2 parameters according to the [OWASP Password
+// Storage Cheat Sheet]. This also uses Argon2id as the Argon2 type and version
+// 0x13 as the Argon2 version.
 //
 // This is a convenience function for using [NewEncryptor] and
 // [Encryptor.Encrypt].
 //
-// [recommended Argon2 parameters]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+// [OWASP Password Storage Cheat Sheet]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#argon2id
 func Encrypt(plaintext, passphrase []byte) []byte {
 	return NewEncryptor(plaintext, passphrase).Encrypt()
 }
@@ -113,7 +117,7 @@ func Encrypt(plaintext, passphrase []byte) []byte {
 // EncryptWithParams encrypts the plaintext with the given Argon2 parameters
 // and returns the ciphertext.
 //
-// This uses Argon2id as the Argon2 type.
+// This uses Argon2id as the Argon2 type and version 0x13 as the Argon2 version.
 //
 // This is a convenience function for using [NewEncryptorWithParams] and
 // [Encryptor.Encrypt].
@@ -121,13 +125,13 @@ func EncryptWithParams(plaintext, passphrase []byte, memoryCost, timeCost uint32
 	return NewEncryptorWithParams(plaintext, passphrase, memoryCost, timeCost, parallelism).Encrypt()
 }
 
-// EncryptWithType encrypts the plaintext with the given Argon2 type and Argon2
-// parameters and returns the ciphertext.
+// EncryptWithContext encrypts the plaintext with the given Argon2 type and
+// Argon2 parameters and returns the ciphertext.
 //
 // This uses version 0x13 as the Argon2 version.
 //
-// This is a convenience function for using [NewEncryptorWithType] and
+// This is a convenience function for using [NewEncryptorWithContext] and
 // [Encryptor.Encrypt].
-func EncryptWithType(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) []byte {
-	return NewEncryptorWithType(plaintext, passphrase, argon2Type, memoryCost, timeCost, parallelism).Encrypt()
+func EncryptWithContext(plaintext, passphrase []byte, argon2Type Argon2Type, memoryCost, timeCost uint32, parallelism uint8) []byte {
+	return NewEncryptorWithContext(plaintext, passphrase, argon2Type, memoryCost, timeCost, parallelism).Encrypt()
 }

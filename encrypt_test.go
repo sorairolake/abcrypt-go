@@ -103,7 +103,7 @@ func TestEncryptWithParams(t *testing.T) {
 	}
 }
 
-func TestEncryptWithType(t *testing.T) {
+func TestEncryptWithContext(t *testing.T) {
 	t.Parallel()
 
 	data, err := os.ReadFile("testdata/data.txt")
@@ -111,7 +111,7 @@ func TestEncryptWithType(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.NewEncryptorWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
 	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
@@ -199,7 +199,7 @@ func TestEncryptArgon2Type(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.NewEncryptorWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
 
 	argon2Type := binary.LittleEndian.Uint32(ciphertext[8:12])
 	if argon2Type != 1 {
@@ -215,7 +215,7 @@ func TestEncryptArgon2Version(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.NewEncryptorWithType(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).Encrypt()
 
 	argon2Version := binary.LittleEndian.Uint32(ciphertext[12:16])
 	if argon2Version != 0x13 {
@@ -345,7 +345,7 @@ func TestConvenientEncryptWithParams(t *testing.T) {
 	}
 }
 
-func TestConvenientEncryptWithType(t *testing.T) {
+func TestConvenientEncryptWithContext(t *testing.T) {
 	t.Parallel()
 
 	data, err := os.ReadFile("testdata/data.txt")
@@ -353,7 +353,7 @@ func TestConvenientEncryptWithType(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.EncryptWithType(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4)
+	ciphertext := abcrypt.EncryptWithContext(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4)
 	if slices.Equal(ciphertext, data) {
 		t.Fatal("unexpected match between ciphertext and test data")
 	}
