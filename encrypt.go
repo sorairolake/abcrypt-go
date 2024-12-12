@@ -59,6 +59,9 @@ func NewEncryptorWithContext(plaintext, passphrase []byte, argon2Type Argon2Type
 	m := header.memoryCost
 	p := uint8(header.parallelism)
 
+	// The derived key size is 96 bytes. The first 256 bits are for
+	// XChaCha20-Poly1305 key, and the last 512 bits are for
+	// BLAKE2b-512-MAC key.
 	var k []byte
 
 	switch header.argon2Type {
