@@ -16,35 +16,62 @@ import (
 func TestDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
-	if err != nil {
-		t.Fatal(err)
-	}
+	{
+		dataEnc, err := os.ReadFile("testdata/v1/argon2i/v0x13/data.txt.abcrypt")
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	data, err := os.ReadFile("testdata/data.txt")
-	if err != nil {
-		t.Fatal(err)
-	}
+		data, err := os.ReadFile("testdata/data.txt")
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
-	if err != nil {
-		t.Fatal(err)
-	}
+		cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	plaintext, err := cipher.Decrypt()
-	if err != nil {
-		t.Fatal(err)
-	}
+		plaintext, err := cipher.Decrypt()
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	if !slices.Equal(plaintext, data) {
-		t.Error("unexpected mismatch between plaintext and test data")
+		if !slices.Equal(plaintext, data) {
+			t.Error("unexpected mismatch between plaintext and test data")
+		}
+	}
+	{
+		dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		data, err := os.ReadFile("testdata/data.txt")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		cipher, err := abcrypt.NewDecryptor(dataEnc, []byte(passphrase))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		plaintext, err := cipher.Decrypt()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if !slices.Equal(plaintext, data) {
+			t.Error("unexpected mismatch between plaintext and test data")
+		}
 	}
 }
 
 func TestDecryptIncorrectPassphrase(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -91,7 +118,7 @@ func TestDecryptInvalidInputLength(t *testing.T) {
 func TestDecryptInvalidMagicNumber(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -134,7 +161,7 @@ func TestDecryptUnsupportedVersion(t *testing.T) {
 func TestDecryptUnknownVersion(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -159,7 +186,7 @@ func TestDecryptUnknownVersion(t *testing.T) {
 func TestDecryptInvalidHeaderMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -186,7 +213,7 @@ func TestDecryptInvalidHeaderMAC(t *testing.T) {
 func TestDecryptInvalidMAC(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -220,7 +247,7 @@ func TestDecryptInvalidMAC(t *testing.T) {
 func TestDecryptOutLen(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -243,22 +270,44 @@ func TestDecryptOutLen(t *testing.T) {
 func TestConvenientDecrypt(t *testing.T) {
 	t.Parallel()
 
-	dataEnc, err := os.ReadFile("testdata/v1/data.txt.abcrypt")
-	if err != nil {
-		t.Fatal(err)
-	}
+	{
+		dataEnc, err := os.ReadFile("testdata/v1/argon2i/v0x13/data.txt.abcrypt")
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	data, err := os.ReadFile("testdata/data.txt")
-	if err != nil {
-		t.Fatal(err)
-	}
+		data, err := os.ReadFile("testdata/data.txt")
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	plaintext, err := abcrypt.Decrypt(dataEnc, []byte(passphrase))
-	if err != nil {
-		t.Fatal(err)
-	}
+		plaintext, err := abcrypt.Decrypt(dataEnc, []byte(passphrase))
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	if !slices.Equal(plaintext, data) {
-		t.Error("unexpected mismatch between plaintext and test data")
+		if !slices.Equal(plaintext, data) {
+			t.Error("unexpected mismatch between plaintext and test data")
+		}
+	}
+	{
+		dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		data, err := os.ReadFile("testdata/data.txt")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		plaintext, err := abcrypt.Decrypt(dataEnc, []byte(passphrase))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if !slices.Equal(plaintext, data) {
+			t.Error("unexpected mismatch between plaintext and test data")
+		}
 	}
 }
