@@ -45,12 +45,12 @@ func ExampleEncryptor() {
 
 	// Output:
 	// input data size: 14 B
-	// expected output size: 170 B
-	// encrypted data size: 170 B
+	// expected output size: 178 B
+	// encrypted data size: 178 B
 }
 
 func ExampleDecryptor() {
-	dataEnc, err := os.ReadFile("testdata/data.txt.abcrypt")
+	dataEnc, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -72,13 +72,13 @@ func ExampleDecryptor() {
 	fmt.Printf("decrypted data size: %v B\n", len(plaintext))
 
 	// Output:
-	// input data size: 170 B
+	// input data size: 178 B
 	// expected output size: 14 B
 	// decrypted data size: 14 B
 }
 
 func ExampleParams() {
-	ciphertext, err := os.ReadFile("testdata/data.txt.abcrypt")
+	ciphertext, err := os.ReadFile("testdata/v1/argon2id/v0x13/data.txt.abcrypt")
 	if err != nil {
 		log.Fatal(err)
 	}

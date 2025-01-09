@@ -16,8 +16,8 @@ const passphrase = "passphrase"
 func TestHeaderSize(t *testing.T) {
 	t.Parallel()
 
-	if size := abcrypt.HeaderSize; size != 140 {
-		t.Errorf("expected HeaderSize `%v`, got `%v`", 140, size)
+	if size := abcrypt.HeaderSize; size != 148 {
+		t.Errorf("expected HeaderSize `%v`, got `%v`", 148, size)
 	}
 }
 

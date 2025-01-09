@@ -18,6 +18,8 @@
 //
 // Options:
 //
+//	-argon2-type <TYPE>
+//		Set the Argon2 type.
 //	-memory-cost <NUM>
 //		Set the memory size in KiB.
 //	-time-cost <NUM>

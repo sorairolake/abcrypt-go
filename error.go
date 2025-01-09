@@ -10,12 +10,24 @@ import (
 )
 
 // ErrInvalidLength represents an error due to the encrypted data was shorter
-// than 156 bytes.
-var ErrInvalidLength = errors.New("abcrypt: encrypted data is shorter than 156 bytes")
+// than 164 bytes.
+var ErrInvalidLength = errors.New("abcrypt: encrypted data is shorter than 164 bytes")
 
 // ErrInvalidMagicNumber represents an error due to the magic number (file
 // signature) was invalid.
 var ErrInvalidMagicNumber = errors.New("abcrypt: invalid magic number")
+
+// UnsupportedVersionError represents an error due to the version was the
+// unsupported abcrypt version number.
+type UnsupportedVersionError struct {
+	// Version represents the obtained version number.
+	Version byte
+}
+
+// Error returns a string representation of an [UnsupportedVersionError].
+func (e *UnsupportedVersionError) Error() string {
+	return fmt.Sprintf("abcrypt: unsupported version number `%v`", e.Version)
+}
 
 // UnknownVersionError represents an error due to the version was the
 // unrecognized abcrypt version number.
@@ -27,6 +39,30 @@ type UnknownVersionError struct {
 // Error returns a string representation of an [UnknownVersionError].
 func (e *UnknownVersionError) Error() string {
 	return fmt.Sprintf("abcrypt: unknown version number `%v`", e.Version)
+}
+
+// InvalidArgon2TypeError represents an error due to the Argon2 type were
+// invalid.
+type InvalidArgon2TypeError struct {
+	// Variant represents the obtained Argon2 type.
+	Variant uint32
+}
+
+// Error returns a string representation of an [InvalidArgon2TypeError].
+func (e *InvalidArgon2TypeError) Error() string {
+	return "abcrypt: invalid Argon2 type"
+}
+
+// InvalidArgon2VersionError represents an error due to the Argon2 version were
+// invalid.
+type InvalidArgon2VersionError struct {
+	// Version represents the obtained Argon2 version.
+	Version uint32
+}
+
+// Error returns a string representation of an [InvalidArgon2VersionError].
+func (e *InvalidArgon2VersionError) Error() string {
+	return fmt.Sprintf("abcrypt: invalid Argon2 version `%#x`", e.Version)
 }
 
 // InvalidHeaderMACError represents an error due to the MAC (authentication

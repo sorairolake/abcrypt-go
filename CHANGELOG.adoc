@@ -14,6 +14,16 @@ All notable changes to this project will be documented in this file.
 The format is based on https://keepachangelog.com/[Keep a Changelog], and this
 project adheres to https://semver.org/[Semantic Versioning].
 
+== {compare-url}/v0.2.3\...v0.3.0[0.3.0] - 2025-01-09
+
+=== Added
+
+* Supports the abcrypt version 1 file format ({pull-request-url}/60[#60])
+
+=== Removed
+
+* Remove the abcrypt version 0 file format support ({pull-request-url}/60[#60])
+
 == {compare-url}/v0.2.2\...v0.2.3[0.2.3] - 2024-04-16
 
 === Changed

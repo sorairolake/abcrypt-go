@@ -26,6 +26,10 @@ func NewDecryptor(ciphertext, passphrase []byte) (*Decryptor, error) {
 		return nil, err
 	}
 
+	if header.argon2Version == version0x10 {
+		panic("abcrypt: version 0x10 is not supported")
+	}
+
 	if header.parallelism > math.MaxUint8 {
 		msg := fmt.Sprintf("abcrypt: `parallelism` over %v is not supported", math.MaxUint8)
 		panic(msg)
@@ -35,10 +39,24 @@ func NewDecryptor(ciphertext, passphrase []byte) (*Decryptor, error) {
 	t := header.timeCost
 	m := header.memoryCost
 	p := uint8(header.parallelism)
-	k := argon2.IDKey(passphrase, s, t, m, p, derivedKeySize)
+
+	// The derived key size is 96 bytes. The first 256 bits are for
+	// XChaCha20-Poly1305 key, and the last 512 bits are for
+	// BLAKE2b-512-MAC key.
+	var k []byte
+
+	switch header.argon2Type {
+	case argon2d:
+		panic("abcrypt: Argon2d is not supported")
+	case Argon2i:
+		k = argon2.Key(passphrase, s, t, m, p, derivedKeySize)
+	case Argon2id:
+		k = argon2.IDKey(passphrase, s, t, m, p, derivedKeySize)
+	}
+
 	derivedKey := newDerivedKey([derivedKeySize]byte(k))
 
-	if err := header.verifyMAC(derivedKey.mac[:], ciphertext[76:HeaderSize]); err != nil {
+	if err := header.verifyMAC(derivedKey.mac[:], ciphertext[84:HeaderSize]); err != nil {
 		return nil, err
 	}
 

@@ -19,7 +19,7 @@ func TestErrInvalidLength(t *testing.T) {
 	t.Parallel()
 
 	err := abcrypt.ErrInvalidLength
-	expected := "abcrypt: encrypted data is shorter than 156 bytes"
+	expected := "abcrypt: encrypted data is shorter than 164 bytes"
 
 	if err.Error() != expected {
 		t.Error("unexpected error message")
@@ -37,6 +37,21 @@ func TestErrInvalidMagicNumber(t *testing.T) {
 	}
 }
 
+func TestUnsupportedVersionError(t *testing.T) {
+	t.Parallel()
+
+	err := abcrypt.UnsupportedVersionError{0}
+	expected := "abcrypt: unsupported version number `0`"
+
+	if err.Error() != expected {
+		t.Error("unexpected error message")
+	}
+
+	if v := err.Version; v != 0 {
+		t.Errorf("expected unsupported version number `%v`, got `%v`", 0, v)
+	}
+}
+
 func TestUnknownVersionError(t *testing.T) {
 	t.Parallel()
 
@@ -49,6 +64,36 @@ func TestUnknownVersionError(t *testing.T) {
 
 	if v := err.Version; v != math.MaxUint8 {
 		t.Errorf("expected unknown version number `%v`, got `%v`", math.MaxUint8, v)
+	}
+}
+
+func TestInvalidArgon2TypeError(t *testing.T) {
+	t.Parallel()
+
+	err := abcrypt.InvalidArgon2TypeError{math.MaxUint32}
+	expected := "abcrypt: invalid Argon2 type"
+
+	if err.Error() != expected {
+		t.Error("unexpected error message")
+	}
+
+	if v := err.Variant; v != math.MaxUint32 {
+		t.Errorf("expected Argon2 type `%v`, got `%v`", math.MaxUint32, v)
+	}
+}
+
+func TestInvalidArgon2VersionError(t *testing.T) {
+	t.Parallel()
+
+	err := abcrypt.InvalidArgon2VersionError{math.MaxUint32}
+	expected := "abcrypt: invalid Argon2 version `0xffffffff`"
+
+	if err.Error() != expected {
+		t.Error("unexpected error message")
+	}
+
+	if v := err.Version; v != math.MaxUint32 {
+		t.Errorf("expected Argon2 version `%#x`, got `%#x`", math.MaxUint32, v)
 	}
 }
 
