@@ -5,9 +5,10 @@
 module github.com/sorairolake/abcrypt-go
 
 go 1.21
+toolchain go1.23.6
 
 require (
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 	golang.org/x/term v0.29.0
 )
 
