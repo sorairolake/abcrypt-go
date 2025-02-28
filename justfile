@@ -17,7 +17,7 @@ default: test
 
 # Run `golangci-lint run`
 @golangci-lint:
-    golangci-lint run -E gofmt,goimports
+    go tool golangci-lint run -E gofmt,goimports
 
 # Run the formatter
 fmt: gofmt goimports
@@ -28,7 +28,7 @@ fmt: gofmt goimports
 
 # Run `goimports`
 @goimports:
-    fd -e go -x goimports -w
+    fd -e go -x go tool goimports -w
 
 # Run the linter
 lint: vet staticcheck
@@ -39,7 +39,11 @@ lint: vet staticcheck
 
 # Run `staticcheck`
 @staticcheck:
-    staticcheck ./...
+    go tool staticcheck ./...
+
+# Run `pkgsite`
+@pkgsite:
+    go tool pkgsite -http "0.0.0.0:8080"
 
 # Build `encrypt` example
 @build-encrypt-example $CGO_ENABLED="0":
@@ -67,4 +71,4 @@ lint: vet staticcheck
 
 # Increment the version
 @bump part:
-    bump-my-version bump {{part}}
+    bump-my-version bump {{ part }}
