@@ -2,10 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
-alias all := default
-
 # Run default recipe
-default: test
+@_default:
+    just -l
 
 # Remove generated artifacts
 @clean:
