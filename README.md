@@ -12,7 +12,7 @@ SPDX-License-Identifier: Apache-2.0 OR MIT
 
 **abcrypt-go** is an implementation of the [abcrypt encrypted data format].
 
-This package supports the abcrypt version 1 file format.
+This package supports version 1 of the abcrypt format.
 
 ## Usage
 
@@ -28,7 +28,7 @@ See the [documentation][reference-url] for more details.
 
 ## Minimum Go version
 
-This library requires the minimum version of Go 1.21.
+This library requires the minimum version of Go 1.23.0.
 
 ## Source code
 
@@ -55,7 +55,7 @@ Copyright (C) 2024 Shun Sakai (see [AUTHORS.adoc])
 This library is distributed under the terms of either the _Apache License 2.0_
 or the _MIT License_.
 
-This project is compliant with version 3.2 of the [_REUSE Specification_]. See
+This project is compliant with version 3.3 of the [_REUSE Specification_]. See
 copyright notices of individual files for more details on copyright and
 licensing information.
 
@@ -68,4 +68,4 @@ licensing information.
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
 [AUTHORS.adoc]: AUTHORS.adoc
-[_REUSE Specification_]: https://reuse.software/spec/
+[_REUSE Specification_]: https://reuse.software/spec-3.3/
