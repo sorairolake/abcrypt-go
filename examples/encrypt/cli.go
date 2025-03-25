@@ -7,6 +7,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/sorairolake/abcrypt-go"
@@ -37,7 +38,10 @@ func init() {
 	flag.BoolVar(&opt.version, "version", false, "Print version number")
 
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0])
+		if _, err := fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0]); err != nil {
+			log.Fatal(err)
+		}
+
 		flag.PrintDefaults()
 	}
 }

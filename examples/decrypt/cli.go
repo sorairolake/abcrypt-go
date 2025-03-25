@@ -7,6 +7,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -22,7 +23,10 @@ func init() {
 	flag.BoolVar(&opt.version, "version", false, "Print version number")
 
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <FILE>\n", os.Args[0])
+		if _, err := fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <FILE>\n", os.Args[0]); err != nil {
+			log.Fatal(err)
+		}
+
 		flag.PrintDefaults()
 	}
 }
