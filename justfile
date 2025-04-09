@@ -22,15 +22,15 @@ golangci-lint: golangci-lint-fmt golangci-lint-run
 
 # Run the formatter
 golangci-lint-fmt:
-    go tool golangci-lint fmt
+    golangci-lint fmt
 
 # Run the linter
 golangci-lint-run:
-    go tool golangci-lint run
+    golangci-lint run
 
 # Run `pkgsite`
 pkgsite:
-    go tool pkgsite -http "0.0.0.0:8080"
+    pkgsite -http "0.0.0.0:8080"
 
 # Build `encrypt` example
 build-encrypt-example $CGO_ENABLED="0":
