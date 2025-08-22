@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: 2024 Shun Sakai
 
-SPDX-License-Identifier: Apache-2.0 OR MIT
+SPDX-License-Identifier: CC-BY-4.0
 -->
 
 # abcrypt-go
@@ -34,11 +34,6 @@ This library requires the minimum version of Go 1.23.0.
 
 The upstream repository is available at
 <https://github.com/sorairolake/abcrypt-go.git>.
-
-The source code is also available at:
-
-- <https://gitlab.com/sorairolake/abcrypt-go.git>
-- <https://codeberg.org/sorairolake/abcrypt-go.git>
 
 ## Changelog
 
