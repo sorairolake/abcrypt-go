@@ -12,18 +12,12 @@ import (
 	"syscall"
 
 	"github.com/sorairolake/abcrypt-go"
-	"github.com/sorairolake/abcrypt-go/examples"
 	"golang.org/x/term"
 )
 
 func main() {
 	flag.Parse()
 	args := flag.Args()
-
-	if opt.version {
-		fmt.Printf("abcrypt-go %v\n", examples.Version)
-		os.Exit(0)
-	}
 
 	if flag.NArg() != 1 {
 		flag.Usage()

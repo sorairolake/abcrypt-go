@@ -18,6 +18,4 @@
 //
 //	-output <FILE>
 //		Output the result to a file.
-//	-version
-//		Print version number.
 package main

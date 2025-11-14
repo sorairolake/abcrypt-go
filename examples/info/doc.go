@@ -17,6 +17,4 @@
 //
 //	-json
 //		Output the encryption parameters as JSON.
-//	-version
-//		Print version number.
 package main

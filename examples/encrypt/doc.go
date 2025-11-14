@@ -26,6 +26,4 @@
 //		Set the number of iterations.
 //	-parallelism <NUM>
 //		Set the degree of parallelism.
-//	-version
-//		Print version number.
 package main
