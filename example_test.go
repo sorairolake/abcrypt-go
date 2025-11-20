@@ -18,14 +18,20 @@ const data = "Hello, world!\n"
 func Example() {
 	ciphertext := abcrypt.EncryptWithParams([]byte(data), []byte(passphrase), 32, 3, 4)
 
-	fmt.Printf("ciphertext and input data are different: %v\n", !slices.Equal(ciphertext, []byte(data)))
+	fmt.Printf(
+		"ciphertext and input data are different: %v\n",
+		!slices.Equal(ciphertext, []byte(data)),
+	)
 
 	plaintext, err := abcrypt.Decrypt(ciphertext, []byte(passphrase))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("plaintext and input data are identical: %v\n", slices.Equal(plaintext, []byte(data)))
+	fmt.Printf(
+		"plaintext and input data are identical: %v\n",
+		slices.Equal(plaintext, []byte(data)),
+	)
 
 	// Output:
 	// ciphertext and input data are different: true

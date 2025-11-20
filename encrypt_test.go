@@ -112,7 +112,8 @@ func TestEncryptWithContext(t *testing.T) {
 	}
 
 	{
-		ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 9216, 4, 1).Encrypt()
+		ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 9216, 4, 1).
+			Encrypt()
 		if slices.Equal(ciphertext, data) {
 			t.Fatal("unexpected match between ciphertext and test data")
 		}
@@ -149,7 +150,8 @@ func TestEncryptWithContext(t *testing.T) {
 		}
 	}
 	{
-		ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).Encrypt()
+		ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).
+			Encrypt()
 		if slices.Equal(ciphertext, data) {
 			t.Fatal("unexpected match between ciphertext and test data")
 		}
@@ -238,7 +240,8 @@ func TestEncryptArgon2Type(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2i, 32, 3, 4).
+		Encrypt()
 
 	argon2Type := binary.LittleEndian.Uint32(ciphertext[8:12])
 	if argon2Type != 1 {
@@ -254,7 +257,8 @@ func TestEncryptArgon2Version(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).Encrypt()
+	ciphertext := abcrypt.NewEncryptorWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4).
+		Encrypt()
 
 	argon2Version := binary.LittleEndian.Uint32(ciphertext[12:16])
 	if argon2Version != 0x13 {
@@ -393,7 +397,14 @@ func TestConvenientEncryptWithContext(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		ciphertext := abcrypt.EncryptWithContext(data, []byte(passphrase), abcrypt.Argon2i, 9216, 4, 1)
+		ciphertext := abcrypt.EncryptWithContext(
+			data,
+			[]byte(passphrase),
+			abcrypt.Argon2i,
+			9216,
+			4,
+			1,
+		)
 		if slices.Equal(ciphertext, data) {
 			t.Fatal("unexpected match between ciphertext and test data")
 		}
@@ -430,7 +441,14 @@ func TestConvenientEncryptWithContext(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		ciphertext := abcrypt.EncryptWithContext(data, []byte(passphrase), abcrypt.Argon2id, 32, 3, 4)
+		ciphertext := abcrypt.EncryptWithContext(
+			data,
+			[]byte(passphrase),
+			abcrypt.Argon2id,
+			32,
+			3,
+			4,
+		)
 		if slices.Equal(ciphertext, data) {
 			t.Fatal("unexpected match between ciphertext and test data")
 		}

@@ -70,7 +70,11 @@ type header struct {
 	mac           [blake2b.Size]byte
 }
 
-func newHeader(argon2Type Argon2Type, argon2Version argon2Version, memoryCost, timeCost, parallelism uint32) *header {
+func newHeader(
+	argon2Type Argon2Type,
+	argon2Version argon2Version,
+	memoryCost, timeCost, parallelism uint32,
+) *header {
 	var header header
 
 	header.magicNumber = [magicNumberSize]byte([]byte(magicNumber))
