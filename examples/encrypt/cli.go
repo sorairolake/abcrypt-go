@@ -41,7 +41,11 @@ func init() {
 	)
 
 	flag.Usage = func() {
-		if _, err := fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n", os.Args[0]); err != nil {
+		if _, err := fmt.Fprintf(
+			flag.CommandLine.Output(),
+			"Usage: %s [OPTIONS] <INFILE> <OUTFILE>\n",
+			os.Args[0],
+		); err != nil {
 			log.Fatal(err)
 		}
 

@@ -21,7 +21,11 @@ func init() {
 	flag.StringVar(&opt.output, "output", "", "Output the result to a file")
 
 	flag.Usage = func() {
-		if _, err := fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTIONS] <FILE>\n", os.Args[0]); err != nil {
+		if _, err := fmt.Fprintf(
+			flag.CommandLine.Output(),
+			"Usage: %s [OPTIONS] <FILE>\n",
+			os.Args[0],
+		); err != nil {
 			log.Fatal(err)
 		}
 
