@@ -28,7 +28,7 @@ See the [documentation][reference-url] for more details.
 
 ## Minimum Go version
 
-This library requires the minimum version of Go 1.24.0.
+This library requires the minimum version of Go 1.25.0.
 
 ## Source code
 
