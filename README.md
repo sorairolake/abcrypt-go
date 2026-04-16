@@ -26,6 +26,10 @@ go get -u github.com/sorairolake/abcrypt-go
 
 See the [documentation][reference-url] for more details.
 
+## Examples
+
+Please see the [examples] directory for examples of using this library.
+
 ## Minimum Go version
 
 This library requires the minimum version of Go 1.25.0.
@@ -60,6 +64,7 @@ licensing information.
 [reference-url]: https://pkg.go.dev/github.com/sorairolake/abcrypt-go
 [go-version-badge]: https://img.shields.io/github/go-mod/go-version/sorairolake/abcrypt-go?style=for-the-badge&logo=go
 [abcrypt encrypted data format]: https://sorairolake.github.io/abcrypt/book/format.html
+[examples]: examples
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
 [AUTHORS.adoc]: AUTHORS.adoc
