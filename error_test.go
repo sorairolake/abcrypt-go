@@ -101,6 +101,7 @@ func TestInvalidHeaderMACError(t *testing.T) {
 	t.Parallel()
 
 	var mac [64]byte
+
 	err := abcrypt.InvalidHeaderMACError{mac}
 	expected := "abcrypt: invalid header MAC"
 

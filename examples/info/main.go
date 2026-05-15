@@ -17,6 +17,7 @@ import (
 
 func main() {
 	flag.Parse()
+
 	args := flag.Args()
 
 	var ciphertext []byte
@@ -51,6 +52,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		fmt.Println(string(json))
 	} else {
 		m := params.MemoryCost

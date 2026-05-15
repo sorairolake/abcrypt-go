@@ -17,6 +17,7 @@ import (
 
 func main() {
 	flag.Parse()
+
 	args := flag.Args()
 
 	if flag.NArg() != 2 {
@@ -35,6 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println()
 
 	argon2Type := abcrypt.Argon2Type(opt.argon2Type)

@@ -17,6 +17,7 @@ import (
 
 func main() {
 	flag.Parse()
+
 	args := flag.Args()
 
 	if flag.NArg() != 1 {
@@ -35,6 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println()
 
 	plaintext, err := abcrypt.Decrypt(ciphertext, passphrase)
@@ -47,7 +49,8 @@ func main() {
 			log.Fatal(err)
 		}
 	} else {
-		if err := os.WriteFile(opt.output, plaintext, os.ModeType); err != nil {
+		err := os.WriteFile(opt.output, plaintext, os.ModeType)
+		if err != nil {
 			log.Fatal(err)
 		}
 	}
