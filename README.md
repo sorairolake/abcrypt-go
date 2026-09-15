@@ -32,7 +32,7 @@ Please see the [examples] directory for examples of using this library.
 
 ## Minimum Go version
 
-This library requires the minimum version of Go 1.25.0.
+This library requires the minimum version of Go 1.26.0.
 
 ## Source code
 

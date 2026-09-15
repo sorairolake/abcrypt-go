@@ -18,7 +18,7 @@ project adheres to https://semver.org/[Semantic Versioning].
 
 === Changed
 
-* Update the `go` directive to 1.25.0 ({pull-request-url}/142[#142])
+* Update the `go` directive to 1.26.0 ({pull-request-url}/191[#191])
 
 == {compare-url}/v0.3.1\...v0.3.2[0.3.2] - 2025-08-22
 
